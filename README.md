@@ -2,7 +2,7 @@
 Risoluzione della traccia di progetto per il corso di Basi di dati (a.a. 2023-2024) del prof. Vincenzo Moscato.
 Gli studenti coinvolti nel progetto, iscritti al terzo anno in corso di ingegneria informatica presso l'Università degli Studi di Napoli "Federico II" sono: Matteo Arnese, Emanuele Barbato, Luigi Pio Castaldo.
 
-# Traccia dell'elaborato:
+### Traccia dell'elaborato:
 Realizzare una piattaforma informatica che consenta la gestione dei pagamenti 
 autostradali da parte di utenti mediante dispositivi di telepedaggio.
 In particolare, si vogliono memorizzare le informazioni relative ai DISPOSITIVI, dotati di un codice 
