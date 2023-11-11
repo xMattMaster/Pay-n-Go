@@ -1,6 +1,7 @@
 # Pay-n-Go
 Risoluzione della traccia di progetto per il corso di Basi di dati (a.a. 2023-2024) del prof. Vincenzo Moscato.
-Gli studenti coinvolti nel progetto, iscritti al terzo anno in corso di ingegneria informatica presso l'Università degli Studi di Napoli "Federico II" sono: Matteo Arnese, Emanuele Barbato, Luigi Pio Castaldo.
+Gli studenti coinvolti nel progetto, iscritti al terzo anno in corso di ingegneria informatica presso l'Università degli Studi di Napoli "Federico II" sono: Matteo Arnese, Emanuele Barbato, Luigi Pio Castaldo, Lorenzo Cecchini.
+Hosting su Altervista: https://basidati.altervista.org/
 
 ### Traccia dell'elaborato:
 Realizzare una piattaforma informatica che consenta la gestione dei pagamenti 
