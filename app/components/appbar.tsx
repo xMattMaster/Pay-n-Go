@@ -22,7 +22,7 @@ const theme = createTheme({
     },
 });
 
-export default function component() {
+export default function Component() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     var appbarLogo = "/logo_name.svg";
     if (prefersDarkMode) appbarLogo = "/logo_name_dark.svg"
