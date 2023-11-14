@@ -5,6 +5,7 @@ import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from './components/appbar';
+import Footer from './components/footer'
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -32,8 +33,9 @@ export default function Home() {
         <Grid xs={12}>
           {AppBar()}
         </Grid>
+
         <Grid xs={12}>
-          <Paper
+          <Paper square
             sx={{
               position: 'relative',
               backgroundColor: 'grey.800',
@@ -81,41 +83,45 @@ export default function Home() {
         </Grid>
 
         <Grid xs={12} md={4}>
-            <Box sx={prosItem}>
-              <TaskAlt sx={{ height: 55, width:55 }} />
-              <Typography variant="h6" sx={{ my: 5 }}>
-                {'Facile'}
-              </Typography>
-              <Typography variant="subtitle1" align='center'>
-                {'Leave it and forget it! Lascia il dispositivo sul cruscotto e guida senza pensieri. '}
-                {'Saremo al tuo fianco quando ne hai più bisogno!'}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid xs={12} md={4}>
-            <Box sx={prosItem}>
-              <Speed sx={{ height: 55, width:55 }} />
-              <Typography variant="h6" sx={{ my: 5 }}>
-                {'Veloce'}
-              </Typography>
-              <Typography variant="subtitle1" align='center'>
-                {'Code chilometriche all\'uscita dell\'autostrada? Nessun problema! Con noi salti la '}
-                {'fila e vai diretto verso la tua destinazione! Mai più estenuanti attesa al casello!'}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid xs={12} md={4}>
-            <Box sx={prosItem}>
-            <SavingsOutlined sx={{ height: 55, width:55 }} />
-              <Typography variant="h6" sx={{ my: 5 }}>
-                {'Conveniente'}
-              </Typography>
-              <Typography variant="subtitle1" align='center'>
-                {'Risparmia carburante, tempo ed energie! Ma non solo; con il servizio fedeltà ricevi '}
-                {'sconti esclusivi presso la nostra fitta rete di partner!'}
-              </Typography>
-            </Box>
-          </Grid>
+          <Box sx={prosItem}>
+            <TaskAlt sx={{ height: 55, width:55 }} />
+            <Typography variant="h6" sx={{ my: 5 }}>
+              {'Facile'}
+            </Typography>
+            <Typography variant="subtitle1" align='center'>
+              {'Leave it and forget it! Lascia il dispositivo sul cruscotto e guida senza pensieri. '}
+              {'Saremo al tuo fianco quando ne hai più bisogno!'}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid xs={12} md={4}>
+          <Box sx={prosItem}>
+            <Speed sx={{ height: 55, width:55 }} />
+            <Typography variant="h6" sx={{ my: 5 }}>
+              {'Veloce'}
+            </Typography>
+            <Typography variant="subtitle1" align='center'>
+              {'Code chilometriche all\'uscita dell\'autostrada? Nessun problema! Con noi salti la '}
+              {'fila e vai diretto verso la tua destinazione! Mai più estenuanti attesa al casello!'}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid xs={12} md={4}>
+          <Box sx={prosItem}>
+          <SavingsOutlined sx={{ height: 55, width:55 }} />
+            <Typography variant="h6" sx={{ my: 5 }}>
+              {'Conveniente'}
+            </Typography>
+            <Typography variant="subtitle1" align='center'>
+              {'Risparmia carburante, tempo ed energie! Ma non solo; con il servizio fedeltà ricevi '}
+              {'sconti esclusivi presso la nostra fitta rete di partner!'}
+            </Typography>
+          </Box>
+        </Grid>
+
+        <Grid xs={12}>
+          {Footer()}
+        </Grid>
       </Grid>
     </ThemeProvider>
   )
