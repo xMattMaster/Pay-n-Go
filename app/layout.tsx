@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import { IubendaProvider, IubendaCookieSolutionBannerConfigInterface, i18nDictionaries } from '@mep-agency/next-iubenda'
+import { IubendaProvider, IubendaCookieSolutionBannerConfigInterface } from '@mep-agency/next-iubenda'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
