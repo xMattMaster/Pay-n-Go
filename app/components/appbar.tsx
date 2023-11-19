@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from 'next/link';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
@@ -9,8 +10,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { getDesignTokens } from './../theme';
 
-
 export default function Component() {
+
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     var appbarLogo = "/logo_name.svg";
     if (prefersDarkMode) appbarLogo = "/logo_name_dark.svg"
@@ -32,9 +33,11 @@ export default function Component() {
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
+                <Link href ="/sign-in">
                 <Button variant="outlined" size="small">
                     {'Accedi'}
                 </Button>
+                </Link>
             </Toolbar>
         </ThemeProvider>
     )
