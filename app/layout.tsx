@@ -30,7 +30,7 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
     acceptButtonDisplay: true,
     rejectButtonDisplay :true,
     closeButtonDisplay: false,
-    continueWithoutAcceptingButtonDisplay: true,
+    //continueWithoutAcceptingButtonDisplay: true,
     explicitWithdrawal :true,
     customizeButtonDisplay :true,
     listPurposes: true,
