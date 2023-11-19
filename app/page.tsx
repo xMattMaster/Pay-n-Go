@@ -5,7 +5,7 @@ import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from './components/appbar';
-import Footer from './components/footer'
+import Footer from './components/footer';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
