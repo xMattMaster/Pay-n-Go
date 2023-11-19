@@ -1,5 +1,5 @@
 "use client"
-import * as React from 'react'; 
+import * as React from 'react';
 import { Theme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
