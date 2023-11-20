@@ -41,13 +41,13 @@ export default function Component() {
                         <Box sx={{ m: 2 }}>
                             <Box component="ul" sx={{ m: 0, listStyle: 'none', p: 0 }}>
                                 <Box component="li" sx={{ py: 0.5 }}>
-                                    <Link href="https://www.iubenda.com/termini-e-condizioni/32137593">{'Termini di servizio'}</Link>
+                                    <Link href="/terms" rel="terms-of-service" title="Termini di servizio">{'Termini di servizio'}</Link>
                                 </Box>
                                 <Box component="li" sx={{ py: 0.5 }}>
-                                    <Link href="https://www.iubenda.com/privacy-policy/32137593" rel="help" title="Privacy policy">{'Privacy policy'}</Link>
+                                    <Link href="https://www.iubenda.com/privacy-policy/32137593" rel="privacy-policy" title="Privacy policy">{'Privacy policy'}</Link>
                                 </Box>
                                 <Box component="li" sx={{ py: 0.5 }}>
-                                    <Link href="https://www.iubenda.com/privacy-policy/32137593/cookie-policy" rel="help" title="Cookie policy">{'Cookie policy'}</Link>
+                                    <Link href="https://www.iubenda.com/privacy-policy/32137593/cookie-policy" rel="privacy-policy" title="Cookie policy">{'Cookie policy'}</Link>
                                 </Box>
                             </Box>
                         </Box>
