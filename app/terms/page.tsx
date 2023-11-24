@@ -103,8 +103,8 @@ export default function Home() {
                         <Typography variant="body1" gutterBottom>
                             <strong>{'Terms and Conditions'}</strong>
                             {' (also referred as "Terms") mean '}
-                            {' these Terms and Conditions that form the entire agreement between You '}
-                            {' and the Company regarding the use of the Service.'}
+                            {'these Terms and Conditions that form the entire agreement between You '}
+                            {'and the Company regarding the use of the Service.'}
                         </Typography>
                     </li>
                     <li>
@@ -118,14 +118,14 @@ export default function Home() {
                     <li>    
                         <Typography variant="body1" gutterBottom>
                             <strong>{'Website'}</strong>
-                            {'refers to Pay n\' Go, accessible from '}
+                            {' refers to Pay n\' Go, accessible from '}
                             <Link href="https://basidati.altervista.org" rel="describes">{'https://basidati.altervista.org'}</Link>
                         </Typography>
                     </li>
                     <li>
                         <Typography variant="body1" gutterBottom>
                             <strong>{'You'}</strong>
-                            {'means the individual accessing or using the '}
+                            {' means the individual accessing or using the '}
                             {'Service, or the company, or other legal entity on behalf of which such '}
                             {'individual is accessing or using the Service, as applicable.'}
                         </Typography>
