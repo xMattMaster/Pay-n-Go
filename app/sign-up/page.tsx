@@ -28,7 +28,7 @@ async function registration(params: string) {
   };
   
 
-  const res = await fetch('http://basidati.altervista.org/api/registration.php', fetchData);
+  const res = await fetch('http://basidati.altervista.org/scripts/registration.php', fetchData);
   const res_final = await res.json();
   return res_final;
    
@@ -42,6 +42,7 @@ export default function SignUp() {
     let params = {
       "email" : data.get('email'),
       "password": data.get('password')
+      
     };
     
     let params_json = JSON.stringify(params);
