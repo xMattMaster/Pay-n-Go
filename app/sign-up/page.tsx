@@ -16,14 +16,45 @@ import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '../theme';
 
 
+async function registration(params: string) {
+  
+  let fetchData = {
+   "method": "POST",
+   "body": params,
+   "headers" : {
+    "Accept": "application/json",
+    "Content-Type" : "application/json"
+   }
+  };
+  
+
+  const res = await fetch('http://basidati.altervista.org/scripts/registration.php', fetchData);
+  const res_final = await res.json();
+  return res_final;
+   
+}
+
+
 export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    let params = {
+      "email" : data.get('email'),
+      "password": data.get('password')
+      
+    };
+    
+    let params_json = JSON.stringify(params);
+
+    /*console.log({
       email: data.get('email'),
       password: data.get('password'),
-    });
+      params: params_json
+    });*/
+
+    registration(params_json).then(response => console.log(response)); //TODO: Remove console log
+
   };
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   return (
