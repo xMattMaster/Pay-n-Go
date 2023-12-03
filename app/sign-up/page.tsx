@@ -33,20 +33,18 @@ async function registration(params: string) {
         }
     };
 
-
-    const res = await fetch('http://basidati.altervista.org/scripts/registration.php', fetchData);
+    const res = await fetch('https://basidati.altervista.org/scripts/registration.php', fetchData);
     const res_final = await res.json();
     return res_final;
-
 }
 
 
 export default function SignUp() {
 
     const checkAge = dayjs().startOf('day').subtract(18, 'year');
-    const [error, setError] = React.useState<DateValidationError | null>(null);
-    const errorMessage = React.useMemo(() => {
-        switch (error) {
+    const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
+    const dateErrorMessage = React.useMemo(() => {
+        switch (dateError) {
             case 'maxDate':
             case 'minDate': {
                 return 'Devi essere maggiorenne';
@@ -60,10 +58,25 @@ export default function SignUp() {
                 return '';
             }
         }
-    }, [error]);
+    }, [dateError]);
 
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackbarOpen(false);
+    };
+
+    const [status, setStatusBase] = React.useState("");
+    const setStatus = (registrationError: string) => setStatusBase(registrationError);
+
+    const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setIsSubmitBtnDisabled(true);
+        document.getElementById('registrationButton');
         const data = new FormData(event.currentTarget);
         var bDayNorm = dayjs().format("YYYY-MM-DD");
         if (data.get('dateOfBirth') != "") {
@@ -100,21 +113,24 @@ export default function SignUp() {
         else if (params.email == "") { setStatus("Il campo \"Email\" non può essere vuoto."); regErr = 1; }
         else if (params.password == "") { setStatus("Il campo \"Password\" non può essere vuoto."); regErr = 1; }
         if (regErr == 1) {
-            setOpen(true);
+            setSnackbarOpen(true);
+            setIsSubmitBtnDisabled(false);
             return;
         }
-        registration(params_json).then(response => console.log(response)); //TODO: Remove console log
-    };
-
-    const [open, setOpen] = React.useState(false);
-    const [status, setStatusBase] = React.useState("");
-    const setStatus = (registrationError: string) => setStatusBase(registrationError);
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
+        registration(params_json).then(response => 
+            {
+                if (response["res"] == 1) {
+                    setInterval(() => { window.location.replace("/sign-in"); }, 3000);
+                    setStatus("Registrazione completata con successo.");
+                    setSnackbarOpen(true);
+                }
+                else
+                {
+                    setStatus("C'è stato un errore nell'elaborazione della richiesta.");
+                    setSnackbarOpen(true);
+                    setIsSubmitBtnDisabled(false);
+                }
+            });
     };
 
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -155,6 +171,7 @@ export default function SignUp() {
                                             fullWidth
                                             id="firstName"
                                             label="Nome"
+                                            inputProps={{ maxLength: 20 }}
                                             autoFocus
                                         />
                                     </Grid>
@@ -166,6 +183,7 @@ export default function SignUp() {
                                             label="Cognome"
                                             name="lastName"
                                             autoComplete="family-name"
+                                            inputProps={{ maxLength: 20 }}
                                         />
                                     </Grid>
                                     <Grid xs={12} sm={5}>
@@ -178,11 +196,11 @@ export default function SignUp() {
                                                     textField: {
                                                         id: "dateOfBirth",
                                                         required: true,
-                                                        helperText: errorMessage,
+                                                        helperText: dateErrorMessage,
                                                         name: "dateOfBirth"
                                                     },
                                                 }}
-                                                onError={(newError) => setError(newError)}
+                                                onError={(newError) => setDateError(newError)}
                                                 label="Data di nascita"
                                             />
                                         </LocalizationProvider>
@@ -194,6 +212,7 @@ export default function SignUp() {
                                             id="cfId"
                                             label="Codice fiscale"
                                             name="cfId"
+                                            inputProps={{ maxLength: 16, style: { textTransform: "uppercase" } }}
                                         />
                                     </Grid>
                                     <Grid xs={12}>
@@ -204,6 +223,7 @@ export default function SignUp() {
                                             label="Indirizzo"
                                             name="address"
                                             autoComplete="street-address"
+                                            inputProps={{ maxLength: 40 }}
                                         />
                                     </Grid>
                                     <Grid xs={12}>
@@ -214,6 +234,7 @@ export default function SignUp() {
                                             label="Email"
                                             name="email"
                                             autoComplete="email"
+                                            inputProps={{ maxLength: 50 }}
                                         />
                                     </Grid>
                                     <Grid xs={12}>
@@ -225,12 +246,14 @@ export default function SignUp() {
                                             type="password"
                                             id="password"
                                             autoComplete="current-password"
+                                            inputProps={{ maxLength: 50 }}
                                         />
                                     </Grid>
                                 </Grid>
                                 <Button
                                     type="submit"
                                     fullWidth
+                                    disabled={isSubmitBtnDisabled}
                                     variant="outlined"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
@@ -249,9 +272,9 @@ export default function SignUp() {
                 </Grid>
                 {status ?
                     <Snackbar
-                        open={open}
+                        open={snackbarOpen}
                         autoHideDuration={6000}
-                        onClose={handleClose}
+                        onClose={handleSnackbarClose}
                         message={status}
                     /> : null}
 
