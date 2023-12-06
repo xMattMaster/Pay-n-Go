@@ -1,4 +1,5 @@
 DROP TRIGGER IF EXISTS verifica_eta;
+DELIMITER //
 CREATE TRIGGER verifica_eta
 BEFORE INSERT ON CLIENTI
 FOR EACH ROW
@@ -14,3 +15,5 @@ BEGIN
         SET MESSAGE_TEXT = 'Devi essere maggiorenne per poterti registrare';
     END IF;
 END
+//
+DELIMITER ;

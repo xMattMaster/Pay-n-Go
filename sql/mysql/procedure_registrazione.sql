@@ -1,9 +1,8 @@
 SELECT AUTO_INCREMENT
 FROM information_schema.TABLES
-WHERE TABLE_SCHEMA = "my_basidati"
-AND TABLE_NAME = "CLIENTI"
+WHERE TABLE_SCHEMA = "gmhncvbk_basidati"
+AND TABLE_NAME = "CLIENTI";
 
-DROP PROCEDURE IF EXISTS REGISTRA_UTENTE;
 CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_Nome VARCHAR(20),
     IN In_Cognome VARCHAR(20),
@@ -15,7 +14,7 @@ CREATE PROCEDURE REGISTRA_UTENTE (
 )
 BEGIN
     DECLARE Id_Cliente Int;
-    SET Id_Cliente = SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'my_basidati' AND TABLE_NAME = 'CLIENTI';
+    SET Id_Cliente = SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'gmhncvbk_basidati' AND TABLE_NAME = 'CLIENTI';
     INSERT INTO CLIENTI (Id, Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
     VALUES (Id_Cliente, In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
     INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
