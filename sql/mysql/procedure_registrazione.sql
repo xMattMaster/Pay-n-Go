@@ -13,6 +13,8 @@ CREATE PROCEDURE REGISTRA_UTENTE (
 BEGIN
     -- Dichiarazione variabile temporanea
     DECLARE Id_Cliente Int;
+    -- Inizializza transazione, garantisce l'atomicità
+    START TRANSACTION;
     -- Inserimento dati nella tabella CLIENTI
     INSERT INTO CLIENTI (Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
     VALUES (In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
@@ -22,4 +24,4 @@ BEGIN
     INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
     COMMIT;
 END; //
-DELIMITER ;
+DELIMITER;
