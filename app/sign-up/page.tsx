@@ -33,7 +33,7 @@ async function registration(params: string) {
         }
     };
 
-    const res = await fetch('https://basidati.altervista.org/scripts/registration.php', fetchData);
+    const res = await fetch('https://basidati.netsons.org/scripts/registration.php', fetchData);
     const res_final = await res.json();
     return res_final;
 }
