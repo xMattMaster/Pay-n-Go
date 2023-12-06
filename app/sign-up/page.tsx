@@ -20,7 +20,12 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '../theme';
 import dayjs from 'dayjs';
+import * as bcrypt from 'bcryptjs';
 
+function hash(clearText: any)
+{
+    return bcrypt.hashSync(clearText, 10);
+}
 
 async function registration(params: string) {
 
@@ -32,12 +37,10 @@ async function registration(params: string) {
             "Content-Type": "application/json"
         }
     };
-
     const res = await fetch('https://basidati.netsons.org/scripts/registration.php', fetchData);
     const res_final = await res.json();
     return res_final;
 }
-
 
 export default function SignUp() {
 
@@ -65,7 +68,6 @@ export default function SignUp() {
         if (reason === 'clickaway') {
             return;
         }
-
         setSnackbarOpen(false);
     };
 
@@ -82,25 +84,18 @@ export default function SignUp() {
         if (data.get('dateOfBirth') != "") {
             bDayNorm = dayjs(data.get('dateOfBirth')?.toString(), 'DD/MM/YYYY').format('YYYY-MM-DD');
         }
+        let cryptedPassword = null;
+        if (data.get('password')?.toString() != "" )
+            cryptedPassword = hash(data.get('password')?.toString()); 
         let params = {
             "email": data.get('email'),
-            "password": data.get('password'),
+            "password": cryptedPassword,
             "firstName": data.get('firstName'),
             "lastName": data.get('lastName'),
             "cfId": data.get('cfId'),
-            "dateOfBirth": bDayNorm,	// MySQL DATE type
+            "dateOfBirth": bDayNorm,
             "address": data.get('address')
         };
-
-        /*console.log({
-            "email": data.get('email'),
-            "password": data.get('password'),
-            "firstName": data.get('firstName'),
-            "lastName": data.get('lastName'),
-            "cfId": data.get('cfId'),
-            "dateOfBirth": bDayNorm,	// MySQL DATE type
-            "address": data.get('address')
-        });*/
 
         let params_json = JSON.stringify(params);
         /* Mega-check validità */

@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@mui/x-date-pickers": "^6.18.2",
+    "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.10",
     "next": "14.0.1",
     "react": "^18",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@mep-agency/next-iubenda": "^1.0.0-alpha4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

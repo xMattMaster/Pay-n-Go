@@ -78,7 +78,7 @@ CREATE SEQUENCE utenti_id_seq START WITH 1;
 CREATE TABLE UTENTI (
     Id NUMBER(6) DEFAULT utenti_id_seq.nextval,
     Email VARCHAR2(50),
-	Password VARCHAR2(50) NOT NULL,
+	Password VARCHAR2(72) NOT NULL,
     Cliente NUMBER(6) NOT NULL,
 
     CONSTRAINT PK_UTENTI PRIMARY KEY (Id),
