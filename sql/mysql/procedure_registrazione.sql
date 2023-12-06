@@ -14,13 +14,10 @@ CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_Password VARCHAR(50)
 )
 BEGIN
-    DECLARE
-    Id_Cliente Int;
-    BEGIN
-    SET Id_Cliente := SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'my_basidati' AND TABLE_NAME = 'CLIENTI';
-        INSERT INTO CLIENTI (Id, Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
-        VALUES (Id_Cliente, In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
-        INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
-        COMMIT;
-    END;
-END REGISTRA_UTENTE;
+    DECLARE Id_Cliente Int;
+    SET Id_Cliente = SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'my_basidati' AND TABLE_NAME = 'CLIENTI';
+    INSERT INTO CLIENTI (Id, Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
+    VALUES (Id_Cliente, In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
+    INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
+    COMMIT;
+END;
