@@ -31,8 +31,6 @@
     $res = $conn->query($sql);
 
     $output->res = 0;
-    //$output->email_got = $decoded['email'];  
-    //$output->password_got = $decoded['password'];
 
     if ($res === TRUE) {
         $output->res = 1;
