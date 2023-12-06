@@ -29,15 +29,13 @@
 
     // TODO: Implementare tramite procedure
     // TODO: Adattare alla nuova configurazione della base dati
-
+    
     $sql1 = "INSERT INTO my_basidati.CLIENTI (Nome,Cognome,DataNascita,CodiceFiscale,Indirizzo) VALUES ('$firstName', '$lastName', '$dateOfBirth', '$cfId', '$address')";
     $sql2 = "INSERT INTO my_basidati.UTENTI (Email,Password,Cliente) VALUES ('$email', '$pass', '$cfId')";
     $res1 = $conn->query($sql1);
     $res2 = $conn->query($sql2);
 
     $output->res = 0;
-    //$output->email_got = $decoded['email'];  
-    //$output->password_got = $decoded['password'];
 
     if ($res1 === TRUE && $res2 === TRUE) {
         $output->res = 1;
