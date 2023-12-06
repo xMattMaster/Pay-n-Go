@@ -1,3 +1,4 @@
+-- Procedure per la registrazione di un nuovo utente nei due database 
 DROP PROCEDURE IF EXISTS REGISTRA_UTENTE;
 DELIMITER //
 CREATE PROCEDURE REGISTRA_UTENTE (
@@ -10,12 +11,15 @@ CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_Password VARCHAR(50)
 )
 BEGIN
+    -- Dichiarazione variabile temporanea
     DECLARE Id_Cliente Int;
-    SET Id_Cliente = SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'gmhncvbk_basidati' AND TABLE_NAME = 'CLIENTI';
-    INSERT INTO CLIENTI (Id, Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
-    VALUES (Id_Cliente, In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
+    -- Inserimento dati nella tabella CLIENTI
+    INSERT INTO CLIENTI (Nome, Cognome, DataNascita, CodiceFiscale, Indirizzo) 
+    VALUES (In_Nome, In_Cognome, In_DataNascita, In_CodiceFiscale, In_Indirizzo);
+    -- Acquisisci l'Id Cliente appena assegnato tramite AUTO_INCREMENT e memorizzalo nella variabile temporanea
+    SET Id_Cliente = LAST_INSERT_ID();
+    -- Inserimento dati nella tabella UTENTI
     INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
     COMMIT;
-END;
-//
+END; //
 DELIMITER ;
