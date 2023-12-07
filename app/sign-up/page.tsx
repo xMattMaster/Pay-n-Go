@@ -126,7 +126,8 @@ export default function SignUp() {
                 }
                 else
                 {
-                    setStatus("C'è stato un errore nell'elaborazione della richiesta.");
+                    let msg = response["message"];
+                    setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
                     setSnackbarOpen(true);
                     setIsSubmitBtnDisabled(false);
                 }
