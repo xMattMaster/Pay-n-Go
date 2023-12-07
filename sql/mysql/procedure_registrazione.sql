@@ -1,6 +1,6 @@
 -- Procedure per la registrazione di un nuovo utente nei due database 
 DROP PROCEDURE IF EXISTS REGISTRA_UTENTE;
-DELIMITER //
+DELIMITER &&
 CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_Nome VARCHAR(20),
     IN In_Cognome VARCHAR(20),
@@ -12,7 +12,7 @@ CREATE PROCEDURE REGISTRA_UTENTE (
 )
 BEGIN
     -- Dichiarazione variabile temporanea
-    DECLARE Id_Cliente Int;
+    DECLARE Id_Cliente INT;
     -- Inizializza transazione, garantisce l'atomicità
     START TRANSACTION;
     -- Inserimento dati nella tabella CLIENTI
@@ -23,5 +23,5 @@ BEGIN
     -- Inserimento dati nella tabella UTENTI
     INSERT INTO UTENTI (Email, Password, Cliente) VALUES (In_Email, In_Password, Id_Cliente);
     COMMIT;
-END; //
+END; $$
 DELIMITER;

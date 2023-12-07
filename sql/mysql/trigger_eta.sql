@@ -1,6 +1,6 @@
 -- Trigger che verifica se l'utente è maggiorenne
 DROP TRIGGER IF EXISTS verifica_eta;
-DELIMITER //
+DELIMITER $$
 CREATE TRIGGER verifica_eta
 BEFORE INSERT ON CLIENTI
 FOR EACH ROW
@@ -15,6 +15,5 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Devi essere maggiorenne per poterti registrare';
     END IF;
-END
-//
+END $$
 DELIMITER ;
