@@ -35,7 +35,7 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
     customizeButtonDisplay :true,
     listPurposes: true,
     showPurposesToggles: true,
-    logo: 'https://basidati.altervista.org/logo_name_dark.svg',
+    logo: 'https://basidati.netsons.org/logo_name_dark.svg',
     position: 'float-bottom-center',
     backgroundOverlay: true,
   }

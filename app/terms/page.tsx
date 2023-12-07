@@ -40,7 +40,7 @@ export default function Home() {
                     {'Terms and Conditions'}
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    {'Last updated: November 20, 2023'}
+                    {'Last updated: December 7, 2023'}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
                     {'Please read these terms and conditions carefully before using Our Service.'}
@@ -119,7 +119,7 @@ export default function Home() {
                         <Typography variant="body1" gutterBottom>
                             <strong>{'Website'}</strong>
                             {' refers to Pay n\' Go, accessible from '}
-                            <Link href="https://basidati.altervista.org" rel="describes">{'https://basidati.altervista.org'}</Link>
+                            <Link href="https://basidati.netsons.org" rel="describes">{'https://basidati.netsons.org'}</Link>
                         </Typography>
                     </li>
                     <li>
@@ -394,7 +394,10 @@ export default function Home() {
                 <ul style={{ listStyleType: "circle", paddingLeft: 40 }}>
                     <li>
                         <Typography variant="body1" gutterBottom>
-                            {'By email: basidati@altervista.org'}
+                            {'By email: '}
+                            <Link href="mailto:68701124+xMattMaster@users.noreply.github.com" rel="author">
+                                {'68701124+xMattMaster@users.noreply.github.com'}
+                            </Link>
                         </Typography>
                     </li>
                 </ul>
