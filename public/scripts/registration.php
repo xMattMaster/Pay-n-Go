@@ -19,6 +19,12 @@
     $dateOfBirth = $decoded['dateOfBirth'];
     $address = $decoded['address'];
 
+    mysqli_report(MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ALL);
+
+    $output = new \stdClass();
+    $output->res = 0;
+    $output->message = "";
+
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -28,15 +34,14 @@
     }
 
     $sql = "CALL REGISTRA_UTENTE ('$firstName', '$lastName', '$dateOfBirth', '$cfId', '$address', '$email', '$pass')";
-    $res = $conn->query($sql);
-
-    $output->res = 0;
-
-    if ($res === TRUE) {
+    try {
+        $res = $conn->query($sql);
+        $output->message = "OK";
         $output->res = 1;
-    } else {
+        echo JSON_encode($output);
+    } catch(mysqli_sql_exception $e) {
+        $output->message = $e->getMessage();
         $output->res = -1;
+        echo JSON_encode($output);
     }
-        
-    echo JSON_encode($output);
 ?>
