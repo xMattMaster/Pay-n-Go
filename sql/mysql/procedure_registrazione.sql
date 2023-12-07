@@ -10,6 +10,7 @@ CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_Email VARCHAR(50),
     IN In_Password VARCHAR(72)
 )
+MODIFIES SQL DATA
 BEGIN
     -- Dichiarazione variabile temporanea
     DECLARE Id_Cliente INT;
