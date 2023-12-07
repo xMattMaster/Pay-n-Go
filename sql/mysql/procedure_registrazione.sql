@@ -8,7 +8,7 @@ CREATE PROCEDURE REGISTRA_UTENTE (
     IN In_CodiceFiscale VARCHAR(16),
     IN In_Indirizzo VARCHAR(40),
     IN In_Email VARCHAR(50),
-    IN In_Password VARCHAR(50)
+    IN In_Password VARCHAR(72)
 )
 BEGIN
     -- Dichiarazione variabile temporanea
