@@ -4,8 +4,8 @@ import { Theme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import AppBar from './components/appbar';
-import Footer from './components/footer';
+import AppBar from '@/app/components/appbar';
+import Footer from '@/app/components/footer';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,7 +13,7 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { TaskAlt, Speed, SavingsOutlined } from '@mui/icons-material';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from './theme';
+import { getDesignTokens } from '@/app/theme';
 
 
 const prosItem: SxProps<Theme> = {
