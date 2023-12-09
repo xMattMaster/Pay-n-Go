@@ -10,7 +10,7 @@ import Link from '@mui/material/Link';
 import { GitHub } from '@mui/icons-material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { getDesignTokens } from '@/app/theme';
+import { getDesignTokens } from './../theme';
 
 
 const FooterIcon: SxProps<Theme> = {
