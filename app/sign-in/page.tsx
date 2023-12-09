@@ -23,9 +23,11 @@ function check(clearText: any, hash_text: any) {
     return bcrypt.compareSync(clearText, hash_text);
 }
 
-function save_session(user_id: string) {
+function save_session(user_id: string, nome:string, cognome:string) {
     const cookies = new Cookies(null, { path: "/", sameSite:"strict" });
     cookies.set("user_id", user_id);
+    cookies.set("nome", nome);
+    cookies.set("cognome", cognome);
 }
 
 async function login(params: string) {
@@ -64,16 +66,16 @@ export default function SignIn() {
         setIsSubmitBtnDisabled(true);
         document.getElementById('loginButton');
         const data = new FormData(event.currentTarget);
-        let password = data.get('password');
 
         let params = {
-            "email": data.get('email')
+            "email": data.get('email'),
+            "password": data.get('password')
         };
 
         let loginError = 0;
 
         if (params.email === "") { setStatus("Il campo \" Email \" non può essere vuoto."); loginError = 1; }
-        if (data.get('password') === "") { setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1; }
+        if (params.password === "") { setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1; }
 
         if (loginError == 1) {
             setSnackbarOpen(true);
@@ -83,20 +85,24 @@ export default function SignIn() {
         let params_json = JSON.stringify(params);
 
         login(params_json).then(response => {
+            console.log(response);
             if (response["res"] == 1) {
-                let in_psw = response["psw"];
                 let id = response["id"];
-                if (check(password, in_psw) == true) {
-                    save_session(id);
-                    setInterval(() => { window.location.replace("/dashboard"); }, 3000);
-                    setStatus("Login completato con successo. ");
-                    setSnackbarOpen(true);
-                } else {
-                    setStatus("La password inserita è errata. ");
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                }
-            } else {
+                let nome = response["nome"];
+                let cognome = response["cognome"];
+                save_session(id, nome, cognome);
+                setInterval(() => { window.location.replace("/dashboard"); }, 3000);
+                setStatus("Login completato con successo.");
+                setSnackbarOpen(true);
+            } else if (response["res"] == 0) {
+                setStatus("La password inserita è errata.");
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            } else if (response["res"] == -1) {
+                setStatus("Nessun utente associato all'email inserita.");
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            } else{
                 let msg = response["message"];
                 setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
                 setSnackbarOpen(true);
