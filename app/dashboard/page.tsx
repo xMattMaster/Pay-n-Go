@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '@/app/theme';
 
 
-export default function Home() {
+export default function Dashboard() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   return (

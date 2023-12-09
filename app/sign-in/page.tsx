@@ -24,8 +24,7 @@ function check(clearText: any, hash_text: any) {
 }
 
 function save_session(user_id: string) {
-    const cookies = new Cookies(null, { path: "/" }); //TODO: Path specifica quale pagina può accedere al cookie. Occorre sostuire con la pagina utente
-    //      appena sarà creata
+    const cookies = new Cookies(null, { path: "/", sameSite:"strict" });
     cookies.set("user_id", user_id);
 }
 

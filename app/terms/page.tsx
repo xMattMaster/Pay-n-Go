@@ -1,7 +1,5 @@
 "use client"
 import * as React from 'react';
-import { Theme } from '@mui/material/styles';
-import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@/app/components/appbar';
@@ -11,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from './../theme';
+import { getDesignTokens } from '@/app/theme';
 
 
 export default function Terms() {
