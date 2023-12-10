@@ -28,16 +28,14 @@ export default function Component() {
                     align="center"
                     noWrap
                     sx={{ flex: 1 }}>
-                        {<img style={{ margin: 'auto', flex: 1, maxHeight: 60 }} src={appbarLogo} alt={"Pay n' Go"} />}
+                    {<img style={{ margin: 'auto', flex: 1, maxHeight: 60 }} src={appbarLogo} alt={"Pay n' Go"} />}
                 </Typography>
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
-                <Link href ="/sign-in">
-                <Button variant="outlined" size="small">
+                <Button href="/sign-in" variant="outlined" size="small">
                     {'Accedi'}
                 </Button>
-                </Link>
             </Toolbar>
         </ThemeProvider>
     )

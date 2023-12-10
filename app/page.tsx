@@ -73,7 +73,7 @@ export default function Home() {
                   <Typography variant="h5" color="inherit" paragraph>
                     {'Le nostre soluzioni ti consentono di viaggiare in tutta Italia in completa serenità. Dici addio alle file interminabili ai caselli autostradali, e dedica più tempo a ciò che è veramente importante.'}
                   </Typography>
-                  <Link variant="subtitle1" href="#">
+                  <Link variant="subtitle1" href="/sign-in">
                     {'Scopri di più!'}
                   </Link>
                 </Box>

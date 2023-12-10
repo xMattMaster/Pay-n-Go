@@ -1,7 +1,5 @@
 "use client"
 import * as React from 'react';
-import { Theme } from '@mui/material/styles';
-import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from './../components/appbar';
@@ -13,7 +11,7 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { TaskAlt, Speed, SavingsOutlined, Padding } from '@mui/icons-material';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from './../theme';
+import { getDesignTokens } from '@/app/theme';
 
 
 const prosItem: SxProps<Theme> = {
