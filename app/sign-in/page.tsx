@@ -20,7 +20,7 @@ import * as bcrypt from 'bcryptjs';
 
 
 function check(clearText: any, hash_text: any) {
-  return bcrypt.compareSync(clearText, hash_text);
+    return bcrypt.compareSync(clearText, hash_text);
 }
 
 function save_session(user_id: string, nome:string, cognome:string) {
@@ -32,22 +32,22 @@ function save_session(user_id: string, nome:string, cognome:string) {
 
 async function login(params: string) {
 
-  let fetchData = {
-      "method": "POST",
-      "body": params,
-      "headers": {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-      }
-  };
-  const res = await fetch('https://basidati.netsons.org/scripts/login.php', fetchData);
-  const res_final = await res.json();
-  return res_final;
+    let fetchData = {
+        "method": "POST",
+        "body": params,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+    const res = await fetch('https://basidati.netsons.org/scripts/login.php', fetchData);
+    const res_final = await res.json();
+    return res_final;
 }
 
 export default function SignIn() {
 
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -77,31 +77,10 @@ export default function SignIn() {
         if (params.email === "") { setStatus("Il campo \" Email \" non può essere vuoto."); loginError = 1; }
         if (params.password === "") { setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1; }
 
-    let params_json = JSON.stringify(params);
-
-    let loginError = 0;
-
-    if (params.email === "") { setStatus("Il campo \" Email \" non può essere vuoto."); loginError = 1; }
-    if (data.get('password') === "") {setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1;}
-
-    if (loginError == 1) {
-      setSnackbarOpen(true);
-      setIsSubmitBtnDisabled(false);
-      return;
-    }
-
-    login(params_json).then(response => {
-      if (response["res"] == 1) {
-        let in_psw = response["psw"];
-        let id = response["id"];
-        if(check(password, in_psw) == true) {
-          save_session(id);
-          // TODO: Passa alla pagina utente
-          setStatus("Login completato con successo. ");
-          setSnackbarOpen(true);
-        } else {
-          setStatus("La password inserita è errata. ");
-          setSnackbarOpen(true);
+        if (loginError == 1) {
+            setSnackbarOpen(true);
+            setIsSubmitBtnDisabled(false);
+            return;
         }
         let params_json = JSON.stringify(params);
 
@@ -203,18 +182,14 @@ export default function SignIn() {
                         </Paper>
                     </Grid>
                 </Grid>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
-        {status ?
-          <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={6000}
-              onClose={handleSnackbarClose}
-              message={status}
-          /> : null}
-      </Container>
-    </ThemeProvider>
-  );
+                {status ?
+                    <Snackbar
+                        open={snackbarOpen}
+                        autoHideDuration={6000}
+                        onClose={handleSnackbarClose}
+                        message={status}
+                    /> : null}
+            </Container>
+        </ThemeProvider>
+    );
 }
