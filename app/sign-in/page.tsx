@@ -19,10 +19,6 @@ import { getDesignTokens } from '../theme';
 import * as bcrypt from 'bcryptjs';
 
 
-function check(clearText: any, hash_text: any) {
-    return bcrypt.compareSync(clearText, hash_text);
-}
-
 function save_session(user_id: string, nome:string, cognome:string) {
     const cookies = new Cookies(null, { path: "/", sameSite:"strict" });
     cookies.set("user_id", user_id);
