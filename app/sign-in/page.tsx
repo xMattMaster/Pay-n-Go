@@ -16,12 +16,7 @@ import Container from '@mui/material/Container';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '../theme';
-import * as bcrypt from 'bcryptjs';
 
-
-function check(clearText: any, hash_text: any) {
-    return bcrypt.compareSync(clearText, hash_text);
-}
 
 function save_session(user_id: string, nome:string, cognome:string) {
     const cookies = new Cookies(null, { path: "/", sameSite:"strict" });

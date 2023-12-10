@@ -8,7 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { getDesignTokens } from '@/app/theme';
+import { getDesignTokens } from './../theme';
 
 export default function Component() {
 

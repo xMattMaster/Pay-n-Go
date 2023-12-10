@@ -18,11 +18,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from '@/app/theme';
+import { getDesignTokens } from '../theme';
 import dayjs from 'dayjs';
 import * as bcrypt from 'bcryptjs';
 
-function hash(clearText: any) {
+function hash(clearText: any)
+{
     return bcrypt.hashSync(clearText, 10);
 }
 
@@ -84,8 +85,8 @@ export default function SignUp() {
             bDayNorm = dayjs(data.get('dateOfBirth')?.toString(), 'DD/MM/YYYY').format('YYYY-MM-DD');
         }
         let cryptedPassword = null;
-        if (data.get('password')?.toString() != "")
-            cryptedPassword = hash(data.get('password')?.toString());
+        if (data.get('password')?.toString() != "" )
+            cryptedPassword = hash(data.get('password')?.toString()); 
         let params = {
             "email": data.get('email'),
             "password": cryptedPassword,
@@ -96,6 +97,7 @@ export default function SignUp() {
             "address": data.get('address')
         };
 
+        let params_json = JSON.stringify(params);
         /* Mega-check validità */
         var regErr = 0;
         if (params.firstName === "") { setStatus("Il campo \"Nome\" non può essere vuoto."); regErr = 1; }
@@ -110,21 +112,21 @@ export default function SignUp() {
             setIsSubmitBtnDisabled(false);
             return;
         }
-
-        let params_json = JSON.stringify(params);
-        registration(params_json).then(response => {
-            if (response["res"] == 1) {
-                setInterval(() => { window.location.replace("/sign-in"); }, 3000);
-                setStatus("Registrazione completata con successo.");
-                setSnackbarOpen(true);
-            }
-            else {
-                let msg = response["message"];
-                setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
-                setSnackbarOpen(true);
-                setIsSubmitBtnDisabled(false);
-            }
-        });
+        registration(params_json).then(response => 
+            {
+                if (response["res"] == 1) {
+                    setInterval(() => { window.location.replace("/sign-in"); }, 3000);
+                    setStatus("Registrazione completata con successo.");
+                    setSnackbarOpen(true);
+                }
+                else
+                {
+                    let msg = response["message"];
+                    setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
+                    setSnackbarOpen(true);
+                    setIsSubmitBtnDisabled(false);
+                }
+            });
     };
 
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
