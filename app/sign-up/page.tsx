@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from '@/app/theme';
+import { getDesignTokens } from '../theme';
 import dayjs from 'dayjs';
 import * as bcrypt from 'bcryptjs';
 

@@ -8,44 +8,44 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: "Pay n' Go",
-    description: "On your way to success",
+  title: "Pay n' Go",
+  description: "On your way to success"
 }
 
 const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
-    siteId: 3357361,
-    cookiePolicyId: 32137593,
-    lang: 'it',
-    countryDetection: true,
-    enableGdpr: true,
-    gdprAppliesGlobally: true,
-    perPurposeConsent: true,
-    enableUspr: true,
-    enableLgpd: true,
-    lgpdAppliesGlobally: false,
-    askConsentAtCookiePolicyUpdate: true,
-    floatingPreferencesButtonDisplay: 'bottom-right',
-    privacyPolicyUrl: 'https://www.iubenda.com/privacy-policy/32137593',
-    whitelabel: false,
-    banner: {
-        acceptButtonDisplay: true,
-        rejectButtonDisplay: true,
-        closeButtonDisplay: false,
-        //continueWithoutAcceptingButtonDisplay: true,
-        explicitWithdrawal: true,
-        customizeButtonDisplay: true,
-        listPurposes: true,
-        showPurposesToggles: true,
-        logo: 'https://basidati.netsons.org/logo_name_dark.svg',
-        position: 'float-bottom-center',
-        backgroundOverlay: true,
-    }
+  siteId: 3357361,
+  cookiePolicyId: 32137593,
+  lang: 'it',
+  countryDetection: true,
+  enableGdpr: true,
+  gdprAppliesGlobally: true,
+  perPurposeConsent: true,
+  enableUspr: true,
+  enableLgpd: true,
+  lgpdAppliesGlobally: false,
+  askConsentAtCookiePolicyUpdate: true,
+  floatingPreferencesButtonDisplay: 'bottom-right',
+  privacyPolicyUrl: 'https://www.iubenda.com/privacy-policy/32137593',
+  whitelabel: false,
+  banner:{
+    acceptButtonDisplay: true,
+    rejectButtonDisplay :true,
+    closeButtonDisplay: false,
+    //continueWithoutAcceptingButtonDisplay: true,
+    explicitWithdrawal :true,
+    customizeButtonDisplay :true,
+    listPurposes: true,
+    showPurposesToggles: true,
+    logo: 'https://basidati.netsons.org/logo_name_dark.svg',
+    position: 'float-bottom-center',
+    backgroundOverlay: true,
+  }
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
     return (
         <html lang="it">
