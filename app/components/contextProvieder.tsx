@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 
-function reducer(state:any, action:string) {
+function reducer(state: any, action: string) {
     const { nome, cognome, userId } = state;
     return {
         nome,
@@ -31,11 +31,11 @@ export function useUserData() {
     return React.useContext(UserData);
 }
 
-export function UserDataProvider({ children } : {children : React.ReactNode}) {
+export function UserDataProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = React.useReducer(reducer, initialUserDataState);
     return (
         <UserData.Provider value={state}>
-                {children}
+            {children}
         </UserData.Provider>
     );
 }

@@ -94,14 +94,14 @@ export default function AppBar(theme: Theme) {
                         <Typography sx={{ m: 2 }}>
                             Benvenuto, {UserData.nome} {UserData.cognome}!
                         </Typography>
-                        <MenuItem sx={{ p: 2}} onClick={handleDashboard}>
+                        <MenuItem sx={{ p: 2 }} onClick={handleDashboard}>
                             <ListItemIcon>
                                 <Dashboard fontSize="small" />
                             </ListItemIcon>
                             <ListItemText>Dashboard</ListItemText>
                         </MenuItem>
                         <Divider />
-                        <MenuItem sx={{ p: 2}} onClick={handleLogout}>
+                        <MenuItem sx={{ p: 2 }} onClick={handleLogout}>
                             <ListItemIcon>
                                 <Logout fontSize="small" />
                             </ListItemIcon>

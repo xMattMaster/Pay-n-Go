@@ -11,8 +11,8 @@ import { Theme } from '@mui/material/styles';
 const menuItems: SxProps<Theme> = {
     margin: 1,
     padding: 2,
-    borderRadius: 2 
-  };
+    borderRadius: 2
+};
 
 function Drawer(props: any) {
     const menuItemClickHandle = (element: string) => () => {
@@ -21,25 +21,25 @@ function Drawer(props: any) {
 
     return (
         <Box component="div">
-            <MenuItem sx={ menuItems } selected={(props.selected == "panoramica")} onClick={menuItemClickHandle("panoramica")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "panoramica")} onClick={menuItemClickHandle("panoramica")}>
                 <ListItemIcon>
                     <Done />
                 </ListItemIcon>
                 <ListItemText>Panoramica</ListItemText>
             </MenuItem>
-            <MenuItem sx={ menuItems } selected={(props.selected == "dispositivi")} onClick={menuItemClickHandle("dispositivi")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "dispositivi")} onClick={menuItemClickHandle("dispositivi")}>
                 <ListItemIcon>
                     <Dock />
                 </ListItemIcon>
                 <ListItemText>Dispositivi</ListItemText>
             </MenuItem>
-            <MenuItem sx={ menuItems } selected={(props.selected == "tragitti")} onClick={menuItemClickHandle("tragitti")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "tragitti")} onClick={menuItemClickHandle("tragitti")}>
                 <ListItemIcon>
                     <Map />
                 </ListItemIcon>
                 <ListItemText>Tragitti</ListItemText>
             </MenuItem>
-            <MenuItem sx={ menuItems } selected={(props.selected == "pagamenti")} onClick={menuItemClickHandle("pagamenti")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "pagamenti")} onClick={menuItemClickHandle("pagamenti")}>
                 <ListItemIcon>
                     <CreditCard />
                 </ListItemIcon>
@@ -48,7 +48,7 @@ function Drawer(props: any) {
 
             <Divider />
 
-            <MenuItem sx={ menuItems } selected={(props.selected == "account")} onClick={menuItemClickHandle("account")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "account")} onClick={menuItemClickHandle("account")}>
                 <ListItemIcon>
                     <Person />
                 </ListItemIcon>
