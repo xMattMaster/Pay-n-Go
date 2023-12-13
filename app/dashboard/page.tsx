@@ -1,13 +1,13 @@
 "use client";
 import * as React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
-import PerfectScrollbar from 'react-perfect-scrollbar'
 import Cookies from 'universal-cookie';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@/app/components/appbar';
 import AppBarMobile from '@/app/dashboard/components/appbarMobile';
 import Grid from '@mui/material/Unstable_Grid2';
+import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,6 +35,14 @@ export default function Dashboard() {
         setIsLoading(false);
     });
 
+    const openDrawer = () => {
+        setIsDrawerOpen(true);
+    }
+
+    const closeDrawer = () => {
+        setIsDrawerOpen(false);
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -54,18 +62,24 @@ export default function Dashboard() {
                         </Grid>
 
                         <Grid xs={6} sm={4} md={3} lg={2}>
-                            <PerfectScrollbar component="div"
+                            <Box component="div"
                                 style={{
                                     paddingLeft: 16,
                                     paddingRight: 16,
-                                    height: "100vh - 64"
+                                    height: 'calc(100vh - 64px)',
+                                    overflow: 'auto'
                                 }}>
                                 <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
-                            </PerfectScrollbar>
+                            </Box>
                         </Grid>
 
                         <Grid xs={6} sm={8} md={9} lg={10}>
-                            <Paper elevation={2} sx={{ height: 'calc(100vh - 64px)', p: 2, borderRadius: 2 }}>
+                            <Paper elevation={2}
+                                sx={{
+                                    height: 'calc(100vh - 64px)',
+                                    p: 2, borderRadius: 2,
+                                    overflow: 'auto'
+                                }}>
                                 Qui è dove verranno visualizzate le schermate (da aggiugere).
                             </Paper>
                         </Grid>
@@ -75,15 +89,17 @@ export default function Dashboard() {
                 <MobileView>
                     <Grid container spacing={0} disableEqualOverflow>
                         <Grid xs={12}>
-                            {AppBarMobile(theme)}
+                            <AppBarMobile theme={theme} whenClicked={openDrawer} />
                         </Grid>
 
-                        <Drawer open={isDrawerOpen}>
+                        <Drawer sx={{'& .MuiDrawer-paper': { width: '80vw' } }} open={isDrawerOpen} onClose={closeDrawer}>
                             <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
                         </Drawer>
 
                         <Grid xs={12}>
-
+                            <Paper elevation={2} sx={{ height: 'calc(100vh - 64px)', p: 2, borderRadius: 2 }}>
+                                Qui è dove verranno visualizzate le schermate (da aggiugere).
+                            </Paper>
                         </Grid>
                     </Grid>
                 </MobileView>
