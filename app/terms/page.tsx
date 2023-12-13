@@ -14,13 +14,14 @@ import { getDesignTokens } from '@/app/theme';
 
 export default function Terms() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = getDesignTokens(prefersDarkMode ? 'dark' : 'light');
 
   return (
-    <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid container spacing={2} disableEqualOverflow>
         <Grid xs={12}>
-          {AppBar()}
+          {AppBar(theme)}
         </Grid>
 
         <Grid xs={12}>
@@ -382,7 +383,7 @@ export default function Terms() {
                 </Typography>
                 <ul style={{ listStyleType: "circle", paddingLeft: 40 }}>
                     <li>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body1" style={{ wordWrap: "break-word" }} gutterBottom>
                             {'By email: '}
                             <Link href="mailto:68701124+xMattMaster@users.noreply.github.com" rel="author">
                                 {'68701124+xMattMaster@users.noreply.github.com'}
@@ -394,7 +395,7 @@ export default function Terms() {
         </Grid>
 
         <Grid xs={12}>
-          {Footer()}
+          {Footer(theme)}
         </Grid>
       </Grid>
     </ThemeProvider>

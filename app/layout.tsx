@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import { IubendaProvider, IubendaCookieSolutionBannerConfigInterface } from '@mep-agency/next-iubenda'
+import { UserDataProvider } from './components/contextProvieder';
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -50,7 +51,9 @@ export default function RootLayout({
         <html lang="it">
             <body className={inter.className}>
                 <IubendaProvider bannerConfig={iubendaBannerConfig}>
-                    {children}
+                    <UserDataProvider>
+                        {children}
+                    </UserDataProvider>
                 </IubendaProvider>
                 <Script key="iubenda_autoblocking" src={`//cs.iubenda.com/autoblocking/3357361.js`} type="text/javascript" />
             </body>

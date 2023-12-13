@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import { Theme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
@@ -10,7 +11,6 @@ import Link from '@mui/material/Link';
 import { GitHub } from '@mui/icons-material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { getDesignTokens } from '@/app/theme';
 
 
 const FooterIcon: SxProps<Theme> = {
@@ -19,13 +19,13 @@ const FooterIcon: SxProps<Theme> = {
     alignItems: 'center'
   };
 
-export default function Component() {
+export default function Footer(theme: Theme) {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     var MuiIcon = "/mui.svg";
     if (prefersDarkMode) MuiIcon = "/mui_dark.svg";
 
     return (
-        <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
+        <ThemeProvider theme={theme}>
             <CssBaseline />
             <Paper elevation={4} sx={{ margin: 4, display: 'flex' }}>
                 <Grid container spacing={2}>

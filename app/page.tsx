@@ -25,13 +25,14 @@ const prosItem: SxProps<Theme> = {
 
 export default function Home() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = getDesignTokens(prefersDarkMode ? 'dark' : 'light');
 
   return (
-    <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid container spacing={2} disableEqualOverflow>
         <Grid xs={12}>
-          {AppBar()}
+          {AppBar(theme)}
         </Grid>
 
         <Grid xs={12}>
@@ -46,7 +47,7 @@ export default function Home() {
               backgroundPosition: 'center',
               backgroundImage: `url("/homepage/hpHighway.webp")`,
             }}>
-            {/* Increase the priority of the hero background image */}
+            {/* Increase the priority of the background image */}
             {<img style={{ display: 'none' }} src={"/homepage/hpHighway.webp"} alt={"Sfondo autostrada"} />}
             <Box
               sx={{
@@ -120,7 +121,7 @@ export default function Home() {
         </Grid>
 
         <Grid xs={12}>
-          {Footer()}
+          {Footer(theme)}
         </Grid>
       </Grid>
     </ThemeProvider>

@@ -1,31 +1,93 @@
-"use client"
+"use client";
 import * as React from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import Cookies from 'universal-cookie';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@/app/components/appbar';
-import Footer from '@/app/components/footer';
+import AppBarMobile from '@/app/dashboard/components/appbarMobile';
 import Grid from '@mui/material/Unstable_Grid2';
+import Backdrop from '@mui/material/Backdrop';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import Paper from '@mui/material/Paper';
+import Drawer from '@mui/material/Drawer';
 import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '@/app/theme';
+import { useUserData } from '../components/contextProvieder';
+import NoSSR from '@/app/components/noSSR';
+import DrawerItems from '@/app/dashboard/components/drawer'
 
+
+const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 
 export default function Dashboard() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [selectedDrawerElement, setSelectedDrawerElement] = React.useState("panoramica");
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const theme = getDesignTokens(prefersDarkMode ? 'dark' : 'light');
+    const UserData = useUserData();
 
-  return (
-    <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
-      <CssBaseline />
-      <Grid container spacing={2} disableEqualOverflow>
-        <Grid xs={12}>
-          {AppBar()}
-        </Grid>
+    React.useEffect(() => {
+        if (!UserData.userId) window.location.replace("/sign-in");
+        setIsLoading(false);
+    });
 
-        
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <NoSSR>
+                {isLoading ?
+                    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                        <Stack direction="column" spacing={2}>
+                            <img src="/logo_name_dark.svg" />
+                            <CircularProgress color="inherit" sx={{ alignSelf: "center" }} />
+                        </Stack>
+                    </Backdrop> : null}
 
-        <Grid xs={12}>
-          {Footer()}
-        </Grid>
-      </Grid>
-    </ThemeProvider>
-  )
+                <BrowserView>
+                    <Grid container spacing={0} disableEqualOverflow>
+                        <Grid xs={12}>
+                            {AppBar(theme)}
+                        </Grid>
+
+                        <Grid xs={6} sm={4} md={3} lg={2}>
+                            <PerfectScrollbar component="div"
+                                style={{
+                                    paddingLeft: 16,
+                                    paddingRight: 16,
+                                    height: "100vh - 64"
+                                }}>
+                                <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
+                            </PerfectScrollbar>
+                        </Grid>
+
+                        <Grid xs={6} sm={8} md={9} lg={10}>
+                            <Paper elevation={2} sx={{ height: 'calc(100vh - 64px)', p: 2, borderRadius: 2 }}>
+                                Qui è dove verranno visualizzate le schermate (da aggiugere).
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </BrowserView>
+
+                <MobileView>
+                    <Grid container spacing={0} disableEqualOverflow>
+                        <Grid xs={12}>
+                            {AppBarMobile(theme)}
+                        </Grid>
+
+                        <Drawer open={isDrawerOpen}>
+                            <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
+                        </Drawer>
+
+                        <Grid xs={12}>
+
+                        </Grid>
+                    </Grid>
+                </MobileView>
+            </NoSSR>
+        </ThemeProvider>
+    )
 }

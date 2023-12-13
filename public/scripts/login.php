@@ -3,10 +3,10 @@
     header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Content-Type');
     header('Content-Type: application/json');
-    $servername = "localhost";
-    $username = "gmhncvbk_login";
-    $password = "ah*dQ31ck0ig";
-    $dbname = "gmhncvbk_basidati";
+    $servername = "REDACTED_FOR_SECURITY_REASONS";
+    $username = "REDACTED_FOR_SECURITY_REASONS";
+    $password = "REDACTED_FOR_SECURITY_REASONS";
+    $dbname = "REDACTED_FOR_SECURITY_REASONS";
 
     $content = trim(file_get_contents("php://input"));
     $decoded = json_decode($content, true);
@@ -20,7 +20,8 @@
     $output->res = 0;
     $output->message = "";
     $output->id = "";
-    $output->psw = "";
+    $output->nome = "";
+    $output->cognome = "";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -30,7 +31,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Query to check if the user exists in database. If exists, send the user_id to client
+    // Query to check if the user exists in database. If exists, checks the password
     $query_utenti = "SELECT U.Cliente, U.Password FROM UTENTI U WHERE U.Email = '$email'";
     try {
         $result_utenti = $conn->query($query_utenti);
@@ -38,6 +39,7 @@
             $data_retrieved = $result_utenti->fetch_array(MYSQLI_ASSOC);
             if (password_verify($clearPassword, $data_retrieved['Password']))
             {
+                // If the password is correct, search for the user's first and last names
                 $clientId = $data_retrieved['Cliente'];
                 $query_clienti = "SELECT C.Nome, C.Cognome FROM CLIENTI C WHERE C.Id ='$clientId'";
                 $result_clienti = $conn->query($query_clienti);
