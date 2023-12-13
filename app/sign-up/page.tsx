@@ -46,96 +46,96 @@ async function registration(params: string) {
 
 export default function SignUp() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [status, setStatusBase] = React.useState("");
+    const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
     const isLoggedIn = cookies.get("user_id");
+
+    const checkAge = dayjs().startOf('day').subtract(18, 'year');
+    const dateErrorMessage = React.useMemo(() => {
+        switch (dateError) {
+            case 'maxDate':
+            case 'minDate': {
+                return 'Devi essere maggiorenne';
+            }
+
+            case 'invalidDate': {
+                return 'Data non valida';
+            }
+
+            default: {
+                return '';
+            }
+        }
+    }, [dateError]);
+
+    const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
+    const setStatus = (registrationError: string) => setStatusBase(registrationError);
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitBtnDisabled(true);
+        document.getElementById('registrationButton');
+        const data = new FormData(event.currentTarget);
+        var bDayNorm = dayjs().format("YYYY-MM-DD");
+        if (data.get('dateOfBirth') != "") {
+            bDayNorm = dayjs(data.get('dateOfBirth')?.toString(), 'DD/MM/YYYY').format('YYYY-MM-DD');
+        }
+        let cryptedPassword = null;
+        if (data.get('password')?.toString() != "")
+            cryptedPassword = hash(data.get('password')?.toString());
+        let params = {
+            "email": data.get('email'),
+            "password": cryptedPassword,
+            "firstName": data.get('firstName'),
+            "lastName": data.get('lastName'),
+            "cfId": data.get('cfId'),
+            "dateOfBirth": bDayNorm,
+            "address": data.get('address')
+        };
+
+        /* Mega-check validità */
+        var regErr = 0;
+        if (params.firstName === "") { setStatus("Il campo \"Nome\" non può essere vuoto."); regErr = 1; }
+        else if (params.lastName == "") { setStatus("Il campo \"Cognome\" non può essere vuoto."); regErr = 1; }
+        else if (params.dateOfBirth == dayjs().startOf('day').format('YYYY-MM-DD')) { setStatus("Il campo \"Data\" non è valido."); regErr = 1; }
+        else if (params.cfId == "") { setStatus("Il campo \"Codice fiscale\" non può essere vuoto."); regErr = 1; }
+        else if (params.address == "") { setStatus("Il campo \"Indirizzo\" non può essere vuoto."); regErr = 1; }
+        else if (params.email == "") { setStatus("Il campo \"Email\" non può essere vuoto."); regErr = 1; }
+        else if (params.password == "") { setStatus("Il campo \"Password\" non può essere vuoto."); regErr = 1; }
+        if (regErr == 1) {
+            setSnackbarOpen(true);
+            setIsSubmitBtnDisabled(false);
+            return;
+        }
+
+        let params_json = JSON.stringify(params);
+        registration(params_json).then(response => {
+            if (response["res"] == 1) {
+                setInterval(() => { window.location.replace("/sign-in"); }, 3000);
+                setStatus("Registrazione completata con successo.");
+                setSnackbarOpen(true);
+            }
+            else {
+                let msg = response["message"];
+                setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            }
+        });
+    };
 
     if (isLoggedIn) {
         return (window.location.replace("/dashboard"));
     }
     else {
-        const checkAge = dayjs().startOf('day').subtract(18, 'year');
-        const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
-        const dateErrorMessage = React.useMemo(() => {
-            switch (dateError) {
-                case 'maxDate':
-                case 'minDate': {
-                    return 'Devi essere maggiorenne';
-                }
-
-                case 'invalidDate': {
-                    return 'Data non valida';
-                }
-
-                default: {
-                    return '';
-                }
-            }
-        }, [dateError]);
-
-        const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-        const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-            setSnackbarOpen(false);
-        };
-
-        const [status, setStatusBase] = React.useState("");
-        const setStatus = (registrationError: string) => setStatusBase(registrationError);
-
-        const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
-        const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            setIsSubmitBtnDisabled(true);
-            document.getElementById('registrationButton');
-            const data = new FormData(event.currentTarget);
-            var bDayNorm = dayjs().format("YYYY-MM-DD");
-            if (data.get('dateOfBirth') != "") {
-                bDayNorm = dayjs(data.get('dateOfBirth')?.toString(), 'DD/MM/YYYY').format('YYYY-MM-DD');
-            }
-            let cryptedPassword = null;
-            if (data.get('password')?.toString() != "")
-                cryptedPassword = hash(data.get('password')?.toString());
-            let params = {
-                "email": data.get('email'),
-                "password": cryptedPassword,
-                "firstName": data.get('firstName'),
-                "lastName": data.get('lastName'),
-                "cfId": data.get('cfId'),
-                "dateOfBirth": bDayNorm,
-                "address": data.get('address')
-            };
-
-            /* Mega-check validità */
-            var regErr = 0;
-            if (params.firstName === "") { setStatus("Il campo \"Nome\" non può essere vuoto."); regErr = 1; }
-            else if (params.lastName == "") { setStatus("Il campo \"Cognome\" non può essere vuoto."); regErr = 1; }
-            else if (params.dateOfBirth == dayjs().startOf('day').format('YYYY-MM-DD')) { setStatus("Il campo \"Data\" non è valido."); regErr = 1; }
-            else if (params.cfId == "") { setStatus("Il campo \"Codice fiscale\" non può essere vuoto."); regErr = 1; }
-            else if (params.address == "") { setStatus("Il campo \"Indirizzo\" non può essere vuoto."); regErr = 1; }
-            else if (params.email == "") { setStatus("Il campo \"Email\" non può essere vuoto."); regErr = 1; }
-            else if (params.password == "") { setStatus("Il campo \"Password\" non può essere vuoto."); regErr = 1; }
-            if (regErr == 1) {
-                setSnackbarOpen(true);
-                setIsSubmitBtnDisabled(false);
-                return;
-            }
-
-            let params_json = JSON.stringify(params);
-            registration(params_json).then(response => {
-                if (response["res"] == 1) {
-                    setInterval(() => { window.location.replace("/sign-in"); }, 3000);
-                    setStatus("Registrazione completata con successo.");
-                    setSnackbarOpen(true);
-                }
-                else {
-                    let msg = response["message"];
-                    setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                }
-            });
-        };
-
         return (
             <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
                 <Container component="main">

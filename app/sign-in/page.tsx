@@ -43,76 +43,74 @@ async function login(params: string) {
 
 export default function SignIn() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [status, setStatusBase] = React.useState("");
+    const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
     const isLoggedIn = cookies.get("user_id");
+
+    const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
+    const setStatus = (loginError: string) => setStatusBase(loginError);
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitBtnDisabled(true);
+        document.getElementById('loginButton');
+        const data = new FormData(event.currentTarget);
+
+        let params = {
+            "email": data.get('email'),
+            "password": data.get('password')
+        };
+
+        let loginError = 0;
+
+        if (params.email === "") { setStatus("Il campo \" Email \" non può essere vuoto."); loginError = 1; }
+        if (params.password === "") { setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1; }
+
+        if (loginError == 1) {
+            setSnackbarOpen(true);
+            setIsSubmitBtnDisabled(false);
+            return;
+        }
+        let params_json = JSON.stringify(params);
+
+        login(params_json).then(response => {
+            if (response["res"] == 1) {
+                let id = response["id"];
+                let nome = response["nome"];
+                let cognome = response["cognome"];
+                save_session(id, nome, cognome);
+                setInterval(() => { window.location.replace("/dashboard"); }, 3000);
+                setStatus("Login completato con successo.");
+                setSnackbarOpen(true);
+            } else if (response["res"] == 0) {
+                setStatus("La password inserita è errata.");
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            } else if (response["res"] == -1) {
+                setStatus("Nessun utente associato all'email inserita.");
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            } else {
+                let msg = response["message"];
+                setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            }
+        })
+
+    };
 
     if (isLoggedIn) {
         return (window.location.replace("/dashboard"));
     }
     else {
-        const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-        const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-            setSnackbarOpen(false);
-        };
-
-        const [status, setStatusBase] = React.useState("");
-        const setStatus = (loginError: string) => setStatusBase(loginError);
-
-        const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
-
-
-        const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            setIsSubmitBtnDisabled(true);
-            document.getElementById('loginButton');
-            const data = new FormData(event.currentTarget);
-
-            let params = {
-                "email": data.get('email'),
-                "password": data.get('password')
-            };
-
-            let loginError = 0;
-
-            if (params.email === "") { setStatus("Il campo \" Email \" non può essere vuoto."); loginError = 1; }
-            if (params.password === "") { setStatus("Il campo \"Password\" non può essere vuoto. "); loginError = 1; }
-
-            if (loginError == 1) {
-                setSnackbarOpen(true);
-                setIsSubmitBtnDisabled(false);
-                return;
-            }
-            let params_json = JSON.stringify(params);
-
-            login(params_json).then(response => {
-                if (response["res"] == 1) {
-                    let id = response["id"];
-                    let nome = response["nome"];
-                    let cognome = response["cognome"];
-                    save_session(id, nome, cognome);
-                    setInterval(() => { window.location.replace("/dashboard"); }, 3000);
-                    setStatus("Login completato con successo.");
-                    setSnackbarOpen(true);
-                } else if (response["res"] == 0) {
-                    setStatus("La password inserita è errata.");
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                } else if (response["res"] == -1) {
-                    setStatus("Nessun utente associato all'email inserita.");
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                } else {
-                    let msg = response["message"];
-                    setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                }
-            })
-
-        };
-
         return (
             <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
                 <Container component="main">
