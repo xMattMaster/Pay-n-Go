@@ -1,5 +1,6 @@
 "use client"
 import * as React from 'react';
+import Cookies from 'universal-cookie';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,8 +23,9 @@ import { getDesignTokens } from '../theme';
 import dayjs from 'dayjs';
 import * as bcrypt from 'bcryptjs';
 
-function hash(clearText: any)
-{
+const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
+
+function hash(clearText: any) {
     return bcrypt.hashSync(clearText, 10);
 }
 
@@ -43,9 +45,14 @@ async function registration(params: string) {
 }
 
 export default function SignUp() {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [status, setStatusBase] = React.useState("");
+    const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
+    const isLoggedIn = cookies.get("user_id");
 
     const checkAge = dayjs().startOf('day').subtract(18, 'year');
-    const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
     const dateErrorMessage = React.useMemo(() => {
         switch (dateError) {
             case 'maxDate':
@@ -63,7 +70,6 @@ export default function SignUp() {
         }
     }, [dateError]);
 
-    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -71,10 +77,8 @@ export default function SignUp() {
         setSnackbarOpen(false);
     };
 
-    const [status, setStatusBase] = React.useState("");
     const setStatus = (registrationError: string) => setStatusBase(registrationError);
 
-    const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = React.useState(false);
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsSubmitBtnDisabled(true);
@@ -85,8 +89,8 @@ export default function SignUp() {
             bDayNorm = dayjs(data.get('dateOfBirth')?.toString(), 'DD/MM/YYYY').format('YYYY-MM-DD');
         }
         let cryptedPassword = null;
-        if (data.get('password')?.toString() != "" )
-            cryptedPassword = hash(data.get('password')?.toString()); 
+        if (data.get('password')?.toString() != "")
+            cryptedPassword = hash(data.get('password')?.toString());
         let params = {
             "email": data.get('email'),
             "password": cryptedPassword,
@@ -97,7 +101,6 @@ export default function SignUp() {
             "address": data.get('address')
         };
 
-        let params_json = JSON.stringify(params);
         /* Mega-check validità */
         var regErr = 0;
         if (params.firstName === "") { setStatus("Il campo \"Nome\" non può essere vuoto."); regErr = 1; }
@@ -112,169 +115,173 @@ export default function SignUp() {
             setIsSubmitBtnDisabled(false);
             return;
         }
-        registration(params_json).then(response => 
-            {
-                if (response["res"] == 1) {
-                    setInterval(() => { window.location.replace("/sign-in"); }, 3000);
-                    setStatus("Registrazione completata con successo.");
-                    setSnackbarOpen(true);
-                }
-                else
-                {
-                    let msg = response["message"];
-                    setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
-                    setSnackbarOpen(true);
-                    setIsSubmitBtnDisabled(false);
-                }
-            });
+
+        let params_json = JSON.stringify(params);
+        registration(params_json).then(response => {
+            if (response["res"] == 1) {
+                setInterval(() => { window.location.replace("/sign-in"); }, 3000);
+                setStatus("Registrazione completata con successo.");
+                setSnackbarOpen(true);
+            }
+            else {
+                let msg = response["message"];
+                setStatus(`C'è stato un errore nell'elaborazione della richiesta: ${msg}`);
+                setSnackbarOpen(true);
+                setIsSubmitBtnDisabled(false);
+            }
+        });
     };
 
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    return (
-        <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
-            <Container component="main">
-                <CssBaseline />
-                <Grid container spacing={2} disableEqualOverflow>
-                    <Grid xs={12} sm={8} md={5} smOffset={2} mdOffset={3.5}>
-                        <Paper
-                            sx={{
-                                marginTop: 8,
-                                padding: 4,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
-                            elevation={2}
-                        >
-                            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h5">
-                                Registrazione
-                            </Typography>
-                            <Typography>
-                                <strong>Non inserire dati sensibili o personali reali!</strong> Le informazioni qui inserite
-                                saranno aggiunte in un database del quale non è garantita la protezione e verranno usate
-                                per scopi didattici.
-                            </Typography>
-                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                                <Grid container spacing={2}>
-                                    <Grid xs={12} sm={6}>
-                                        <TextField
-                                            autoComplete="given-name"
-                                            name="firstName"
-                                            required
-                                            fullWidth
-                                            id="firstName"
-                                            label="Nome"
-                                            inputProps={{ maxLength: 20 }}
-                                            autoFocus
-                                        />
-                                    </Grid>
-                                    <Grid xs={12} sm={6}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            id="lastName"
-                                            label="Cognome"
-                                            name="lastName"
-                                            autoComplete="family-name"
-                                            inputProps={{ maxLength: 20 }}
-                                        />
-                                    </Grid>
-                                    <Grid xs={12} sm={5}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                disableFuture
-                                                maxDate={checkAge}
-                                                format='DD/MM/YYYY'
-                                                slotProps={{
-                                                    textField: {
-                                                        id: "dateOfBirth",
-                                                        required: true,
-                                                        helperText: dateErrorMessage,
-                                                        name: "dateOfBirth"
-                                                    },
-                                                }}
-                                                onError={(newError) => setDateError(newError)}
-                                                label="Data di nascita"
+    if (isLoggedIn) {
+        return (window.location.replace("/dashboard"));
+    }
+    else {
+        return (
+            <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
+                <Container component="main">
+                    <CssBaseline />
+                    <Grid container spacing={2} disableEqualOverflow>
+                        <Grid xs={12} sm={8} md={5} smOffset={2} mdOffset={3.5}>
+                            <Paper
+                                sx={{
+                                    marginTop: 8,
+                                    padding: 4,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}
+                                elevation={2}
+                            >
+                                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                                    <LockOutlinedIcon />
+                                </Avatar>
+                                <Typography component="h1" variant="h5">
+                                    Registrazione
+                                </Typography>
+                                <Typography>
+                                    <strong>Non inserire dati sensibili o personali reali!</strong> Le informazioni qui inserite
+                                    saranno aggiunte in un database del quale non è garantita la protezione e verranno usate
+                                    per scopi didattici.
+                                </Typography>
+                                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                                    <Grid container spacing={2}>
+                                        <Grid xs={12} sm={6}>
+                                            <TextField
+                                                autoComplete="given-name"
+                                                name="firstName"
+                                                required
+                                                fullWidth
+                                                id="firstName"
+                                                label="Nome"
+                                                inputProps={{ maxLength: 20 }}
+                                                autoFocus
                                             />
-                                        </LocalizationProvider>
+                                        </Grid>
+                                        <Grid xs={12} sm={6}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="lastName"
+                                                label="Cognome"
+                                                name="lastName"
+                                                autoComplete="family-name"
+                                                inputProps={{ maxLength: 20 }}
+                                            />
+                                        </Grid>
+                                        <Grid xs={12} sm={5}>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                    disableFuture
+                                                    maxDate={checkAge}
+                                                    format='DD/MM/YYYY'
+                                                    slotProps={{
+                                                        textField: {
+                                                            id: "dateOfBirth",
+                                                            required: true,
+                                                            helperText: dateErrorMessage,
+                                                            name: "dateOfBirth"
+                                                        },
+                                                    }}
+                                                    onError={(newError) => setDateError(newError)}
+                                                    label="Data di nascita"
+                                                />
+                                            </LocalizationProvider>
+                                        </Grid>
+                                        <Grid xs={12} sm={7}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="cfId"
+                                                label="Codice fiscale"
+                                                name="cfId"
+                                                inputProps={{ maxLength: 16, style: { textTransform: "uppercase" } }}
+                                            />
+                                        </Grid>
+                                        <Grid xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="address"
+                                                label="Indirizzo"
+                                                name="address"
+                                                autoComplete="street-address"
+                                                inputProps={{ maxLength: 40 }}
+                                            />
+                                        </Grid>
+                                        <Grid xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="email"
+                                                label="Email"
+                                                name="email"
+                                                autoComplete="email"
+                                                inputProps={{ maxLength: 50 }}
+                                            />
+                                        </Grid>
+                                        <Grid xs={12}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                name="password"
+                                                label="Password"
+                                                type="password"
+                                                id="password"
+                                                autoComplete="current-password"
+                                                inputProps={{ maxLength: 50 }}
+                                            />
+                                        </Grid>
                                     </Grid>
-                                    <Grid xs={12} sm={7}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            id="cfId"
-                                            label="Codice fiscale"
-                                            name="cfId"
-                                            inputProps={{ maxLength: 16, style: { textTransform: "uppercase" } }}
-                                        />
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        disabled={isSubmitBtnDisabled}
+                                        variant="outlined"
+                                        sx={{ mt: 3, mb: 2 }}
+                                    >
+                                        Registrati
+                                    </Button>
+                                    <Grid container justifyContent="flex-end">
+                                        <Grid>
+                                            <Link href="/sign-in" variant="body2">
+                                                Hai già un account? Accedi.
+                                            </Link>
+                                        </Grid>
                                     </Grid>
-                                    <Grid xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            id="address"
-                                            label="Indirizzo"
-                                            name="address"
-                                            autoComplete="street-address"
-                                            inputProps={{ maxLength: 40 }}
-                                        />
-                                    </Grid>
-                                    <Grid xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            id="email"
-                                            label="Email"
-                                            name="email"
-                                            autoComplete="email"
-                                            inputProps={{ maxLength: 50 }}
-                                        />
-                                    </Grid>
-                                    <Grid xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            name="password"
-                                            label="Password"
-                                            type="password"
-                                            id="password"
-                                            autoComplete="current-password"
-                                            inputProps={{ maxLength: 50 }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    disabled={isSubmitBtnDisabled}
-                                    variant="outlined"
-                                    sx={{ mt: 3, mb: 2 }}
-                                >
-                                    Registrati
-                                </Button>
-                                <Grid container justifyContent="flex-end">
-                                    <Grid>
-                                        <Link href="/sign-in" variant="body2">
-                                            Hai già un account? Accedi.
-                                        </Link>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Paper>
+                                </Box>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
-                {status ?
-                    <Snackbar
-                        open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={handleSnackbarClose}
-                        message={status}
-                    /> : null}
+                    {status ?
+                        <Snackbar
+                            open={snackbarOpen}
+                            autoHideDuration={6000}
+                            onClose={handleSnackbarClose}
+                            message={status}
+                        /> : null}
 
-            </Container>
-        </ThemeProvider>
-    );
+                </Container>
+            </ThemeProvider>
+        );
+    }
 }

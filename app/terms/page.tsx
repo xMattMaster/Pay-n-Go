@@ -1,37 +1,27 @@
 "use client"
 import * as React from 'react';
-import { Theme } from '@mui/material/styles';
-import { SxProps } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from './../components/appbar';
 import Footer from './../components/footer'
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import { TaskAlt, Speed, SavingsOutlined, Padding } from '@mui/icons-material';
 import { ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from './../theme';
+import { getDesignTokens } from '@/app/theme';
 
 
-const prosItem: SxProps<Theme> = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  px: 5,
-};
-
-export default function Home() {
+export default function Terms() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = getDesignTokens(prefersDarkMode ? 'dark' : 'light');
 
   return (
-    <ThemeProvider theme={getDesignTokens(prefersDarkMode ? 'dark' : 'light')}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid container spacing={2} disableEqualOverflow>
         <Grid xs={12}>
-          {AppBar()}
+          {AppBar(theme)}
         </Grid>
 
         <Grid xs={12}>
@@ -393,7 +383,7 @@ export default function Home() {
                 </Typography>
                 <ul style={{ listStyleType: "circle", paddingLeft: 40 }}>
                     <li>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body1" style={{ wordWrap: "break-word" }} gutterBottom>
                             {'By email: '}
                             <Link href="mailto:68701124+xMattMaster@users.noreply.github.com" rel="author">
                                 {'68701124+xMattMaster@users.noreply.github.com'}
@@ -405,7 +395,7 @@ export default function Home() {
         </Grid>
 
         <Grid xs={12}>
-          {Footer()}
+          {Footer(theme)}
         </Grid>
       </Grid>
     </ThemeProvider>

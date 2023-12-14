@@ -3,10 +3,10 @@
     header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Content-Type');
     header('Content-Type: application/json');
-    $servername = "localhost";
-    $username = "gmhncvbk_registration";
-    $password = "TIk^n-1wbdAN";
-    $dbname = "gmhncvbk_basidati";
+    $servername = "REDACTED_FOR_SECURITY_REASONS";
+    $username = "REDACTED_FOR_SECURITY_REASONS";
+    $password = "REDACTED_FOR_SECURITY_REASONS";
+    $dbname = "REDACTED_FOR_SECURITY_REASONS";
 
     $content = trim(file_get_contents("php://input"));
     $decoded = json_decode($content, true);
@@ -33,6 +33,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
+    // Call to the stored procedure 'REGISTRA_UTENTE', which handles registration
     $sql = "CALL REGISTRA_UTENTE ('$firstName', '$lastName', '$dateOfBirth', '$cfId', '$address', '$email', '$pass')";
     try {
         $res = $conn->query($sql);

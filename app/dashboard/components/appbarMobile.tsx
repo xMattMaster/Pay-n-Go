@@ -14,8 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Theme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { Dashboard, Logout } from '@mui/icons-material';
+import MenuIcon from '@mui/icons-material/Menu';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useUserData } from '@/app/components/contextProvieder';
 import NoSSR from '@/app/components/noSSR';
@@ -23,7 +24,7 @@ import NoSSR from '@/app/components/noSSR';
 
 const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 
-export default function AppBar(theme: Theme) {
+function AppBarMobile(props: any) {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const UserData = useUserData();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -49,7 +50,7 @@ export default function AppBar(theme: Theme) {
     if (UserData.userId) loginButtonText = "Benvenuto, " + UserData.nome + " " + UserData.cognome + "!";
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={props.theme}>
             <CssBaseline />
             <NoSSR>
                 <Toolbar component="nav" sx={{
@@ -60,6 +61,16 @@ export default function AppBar(theme: Theme) {
                     backgroundSize: "contain",
                     backgroundPosition: "center"
                 }}>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={props.whenClicked}
+                    >
+                        <MenuIcon />
+                    </IconButton>
                     <Box
                         alignSelf="center"
                         sx={{ flex: 1 }} />
@@ -114,3 +125,5 @@ export default function AppBar(theme: Theme) {
         </ThemeProvider>
     )
 }
+
+export default AppBarMobile;
