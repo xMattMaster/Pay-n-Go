@@ -2,6 +2,9 @@
 import * as React from 'react';
 import Cookies from 'universal-cookie';
 import CssBaseline from '@mui/material/CssBaseline';
+import Backdrop from '@mui/material/Backdrop';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -27,6 +30,7 @@ const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 function AppBarMobile(props: any) {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const UserData = useUserData();
+    const [isLoading, setIsLoading] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const profileMenuOpen = Boolean(anchorEl);
     const handleIconClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,6 +46,8 @@ function AppBarMobile(props: any) {
         cookies.remove("user_id");
         cookies.remove("nome");
         cookies.remove("cognome");
+        setIsLoading(true);
+
         window.location.replace("/sign-in");
     }
     var appbarLogo = "/logo_name.svg";
@@ -53,6 +59,13 @@ function AppBarMobile(props: any) {
         <ThemeProvider theme={props.theme}>
             <CssBaseline />
             <NoSSR>
+                {isLoading ?
+                    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                        <Stack direction="column" spacing={2}>
+                            <img src="/logo_name_dark.svg" />
+                            <CircularProgress color="inherit" sx={{ alignSelf: "center" }} />
+                        </Stack>
+                    </Backdrop> : null}
                 <Toolbar component="nav" sx={{
                     backgroundImage: `url(${appbarLogo})`,
                     borderBottom: 1,

@@ -47,7 +47,7 @@ export default function AppBar(theme: Theme) {
         cookies.remove("cognome");
         setIsLoading(true);
 
-        setInterval(() => { window.location.replace("/sign-in"); }, 3000);
+        window.location.replace("/sign-in");
     }
     var appbarLogo = "/logo_name.svg";
     if (prefersDarkMode) appbarLogo = "/logo_name_dark.svg";

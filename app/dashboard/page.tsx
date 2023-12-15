@@ -23,8 +23,6 @@ import Account from '@/app/dashboard/panels/account';
 import AccountModify from '@/app/dashboard/panels/account-modify';
 
 
-const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
-
 export default function Dashboard() {
     const [isLoading, setIsLoading] = React.useState(true);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -51,6 +49,19 @@ export default function Dashboard() {
     const elabAccountModify = () => {
         setSelectedDrawerElement("account");
     }
+
+    /**
+     * TODO: Una serie di query SQL (idealmente, una per sezione) che restituisca degli oggetti da passare alle
+     * singole componenti dei pannelli.
+     * Esempio: La query alla tabella utenti dovrà restituire un oggetto del tipo:
+     *  {
+     *      Nome,
+     *      Cognome,
+     *      DataNascita,
+     *      CodiceFiscale,
+     *      Indirizzo
+     *  }
+     */
 
     return (
         <ThemeProvider theme={theme}>
