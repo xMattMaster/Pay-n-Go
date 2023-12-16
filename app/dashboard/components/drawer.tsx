@@ -49,7 +49,7 @@ function Drawer(props: any) {
 
             <Divider />
 
-            <MenuItem sx={menuItems} selected={(props.selected == "account")} onClick={menuItemClickHandle("account")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "account" || props.selected == "account-modify")} onClick={menuItemClickHandle("account")}>
                 <ListItemIcon>
                     <Person />
                 </ListItemIcon>

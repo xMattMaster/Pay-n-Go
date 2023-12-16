@@ -2,6 +2,9 @@
 import * as React from 'react';
 import Cookies from 'universal-cookie';
 import CssBaseline from '@mui/material/CssBaseline';
+import Backdrop from '@mui/material/Backdrop';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -17,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { Theme, ThemeProvider } from '@mui/material/styles';
 import { Dashboard, Logout } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useUserData } from '@/app/components/contextProvieder';
+import { UserDataProvider, useUserData } from '@/app/components/contextProvieder';
 import NoSSR from '@/app/components/noSSR';
 
 
@@ -26,6 +29,7 @@ const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 export default function AppBar(theme: Theme) {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const UserData = useUserData();
+    const [isLoading, setIsLoading] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const profileMenuOpen = Boolean(anchorEl);
     const handleIconClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,6 +45,8 @@ export default function AppBar(theme: Theme) {
         cookies.remove("user_id");
         cookies.remove("nome");
         cookies.remove("cognome");
+        setIsLoading(true);
+
         window.location.replace("/sign-in");
     }
     var appbarLogo = "/logo_name.svg";
@@ -52,6 +58,13 @@ export default function AppBar(theme: Theme) {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <NoSSR>
+                {isLoading ?
+                    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                        <Stack direction="column" spacing={2}>
+                            <img src="/logo_name_dark.svg" />
+                            <CircularProgress color="inherit" sx={{ alignSelf: "center" }} />
+                        </Stack>
+                    </Backdrop> : null}
                 <Toolbar component="nav" sx={{
                     backgroundImage: `url(${appbarLogo})`,
                     borderBottom: 1,
