@@ -72,7 +72,8 @@ CREATE TABLE APPARTENENZE_AUTO (
     CONSTRAINT PK_APPARTENENZE_AUTO PRIMARY KEY (Automobile),
     CONSTRAINT FK_APPARTENENZE_AUTO_AUTOMOBILE FOREIGN KEY (Automobile) REFERENCES AUTOMOBILI(Targa),
     CONSTRAINT FK_APPARTENENZE_AUTO_CLIENTE FOREIGN KEY (Cliente) REFERENCES CLIENTI(Id)
-    -- TODO: trigger AFTER DELETE che elimini anche tutte le auto associate all'utente
+    -- N.B. si ha un effetto simil ON CASCADE per entrambe le chiavi
+    -- esterne attraverso i trigger "elimina_auto" ed "elimina_appartenenze_auto"
 );
 
 CREATE SEQUENCE utenti_id_seq START WITH 1;

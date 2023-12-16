@@ -8,6 +8,13 @@ const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 
 function reducer(state: any, action: string) {
     const { nome, cognome, userId } = state;
+    /*if (action == "logout") {
+        return {
+            nome: "",
+            cognome: "",
+            userId: ""
+        }
+    }*/
     return {
         nome,
         cognome,
@@ -33,6 +40,11 @@ export function useUserData() {
 
 export function UserDataProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = React.useReducer(reducer, initialUserDataState);
+
+    /*function UserDataLogout() {
+        dispatch("logout");
+    }*/
+
     return (
         <UserData.Provider value={state}>
             {children}

@@ -17,10 +17,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '@/app/theme';
 import { useUserData } from '../components/contextProvieder';
 import NoSSR from '@/app/components/noSSR';
-import DrawerItems from '@/app/dashboard/components/drawer'
+import DrawerItems from '@/app/dashboard/components/drawer';
+import Overview from '@/app/dashboard/panels/overview';
+import Account from '@/app/dashboard/panels/account';
+import AccountModify from '@/app/dashboard/panels/account-modify';
 
-
-const cookies = new Cookies(null, { path: "/", sameSite: "strict" });
 
 export default function Dashboard() {
     const [isLoading, setIsLoading] = React.useState(true);
@@ -42,6 +43,25 @@ export default function Dashboard() {
     const closeDrawer = () => {
         setIsDrawerOpen(false);
     };
+    const gotoAccountModify = () => {
+        setSelectedDrawerElement("account-modify");
+    }
+    const elabAccountModify = () => {
+        setSelectedDrawerElement("account");
+    }
+
+    /**
+     * TODO: Una serie di query SQL (idealmente, una per sezione) che restituisca degli oggetti da passare alle
+     * singole componenti dei pannelli.
+     * Esempio: La query alla tabella utenti dovrà restituire un oggetto del tipo:
+     *  {
+     *      Nome,
+     *      Cognome,
+     *      DataNascita,
+     *      CodiceFiscale,
+     *      Indirizzo
+     *  }
+     */
 
     return (
         <ThemeProvider theme={theme}>
@@ -80,7 +100,29 @@ export default function Dashboard() {
                                     p: 2, borderRadius: 2,
                                     overflow: 'auto'
                                 }}>
-                                Qui è dove verranno visualizzate le schermate (da aggiugere).
+                                {(selectedDrawerElement == "panoramica") ?
+                                    <Overview value={{ Nome: "Mario", Cognome: "Rossi" }} />
+                                    : null}
+                                {(selectedDrawerElement == "account") ?
+                                    <Account value={{
+                                        Nome: "Mario",
+                                        Cognome: "Rossi",
+                                        DataNascita: "2000-01-01",
+                                        CodiceFiscale: "RSSMRI00A01A000X",
+                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
+                                    }}
+                                        changePanel={gotoAccountModify} />
+                                    : null}
+                                {(selectedDrawerElement == "account-modify") ?
+                                    <AccountModify value={{
+                                        Nome: "Mario",
+                                        Cognome: "Rossi",
+                                        DataNascita: "2000-01-01",
+                                        CodiceFiscale: "RSSMRI00A01A000X",
+                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
+                                    }}
+                                        changePanel={elabAccountModify} />
+                                    : null}
                             </Paper>
                         </Grid>
                     </Grid>
@@ -92,13 +134,41 @@ export default function Dashboard() {
                             <AppBarMobile theme={theme} whenClicked={openDrawer} />
                         </Grid>
 
-                        <Drawer sx={{'& .MuiDrawer-paper': { width: '80vw' } }} open={isDrawerOpen} onClose={closeDrawer}>
+                        <Drawer sx={{ '& .MuiDrawer-paper': { width: '80vw' } }} open={isDrawerOpen} onClose={closeDrawer}>
                             <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
                         </Drawer>
 
                         <Grid xs={12}>
-                            <Paper elevation={2} sx={{ height: 'calc(100vh - 64px)', p: 2, borderRadius: 2 }}>
-                                Qui è dove verranno visualizzate le schermate (da aggiugere).
+                            <Paper elevation={2}
+                                sx={{
+                                    height: 'calc(100vh - 64px)',
+                                    p: 2,
+                                    borderRadius: 2, 
+                                    overflow: 'auto'
+                                }}>
+                                {(selectedDrawerElement == "panoramica") ?
+                                    <Overview value={{ Nome: "Mario", Cognome: "Rossi" }} />
+                                    : null}
+                                {(selectedDrawerElement == "account") ?
+                                    <Account value={{
+                                        Nome: "Mario",
+                                        Cognome: "Rossi",
+                                        DataNascita: "2000-01-01",
+                                        CodiceFiscale: "RSSMRI00A01A000X",
+                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
+                                    }}
+                                        changePanel={gotoAccountModify} />
+                                    : null}
+                                {(selectedDrawerElement == "account-modify") ?
+                                    <AccountModify value={{
+                                        Nome: "Mario",
+                                        Cognome: "Rossi",
+                                        DataNascita: "2000-01-01",
+                                        CodiceFiscale: "RSSMRI00A01A000X",
+                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
+                                    }}
+                                        changePanel={elabAccountModify} />
+                                    : null}
                             </Paper>
                         </Grid>
                     </Grid>
