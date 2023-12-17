@@ -9,14 +9,39 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateValidationError } from '@mui/x-date-pickers/models';
 import dayjs from 'dayjs';
+import { UserData } from '@/app/components/contextProvieder';
+
+
+async function accModifyPHP(params: string) {
+    let fetchData = {
+        "method": "POST",
+        "body": params,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+
+    const res = await fetch('https://basidati.netsons.org/scripts/dashboard_account_modify.php', fetchData);
+    const res_final = await res.json();
+    return res_final;
+}
 
 function AccountModify(props: any) {
+    const [isDisabled, setDisabled] = React.useState(false);
     let nome = props.value["Nome"];
     let cognome = props.value["Cognome"];
     let codiceFiscale = props.value["CodiceFiscale"];
     let dataNascitaRaw = props.value["DataNascita"];
     let dataNascita = dayjs(dataNascitaRaw, "YYYY-MM-DD");
     let indirizzo = props.value["Indirizzo"];
+    const user_data = React.useContext(UserData);
+
+    const name_ref = React.useRef();
+    const surname_ref = React.useRef();
+    const cf_ref = React.useRef();
+    const date_ref = React.useRef();
+    const location_ref = React.useRef();
 
     const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
     const checkAge = dayjs().startOf('day').subtract(18, 'year');
@@ -24,14 +49,17 @@ function AccountModify(props: any) {
         switch (dateError) {
             case 'maxDate':
             case 'minDate': {
+                setDisabled(true);
                 return 'Devi essere maggiorenne';
             }
 
             case 'invalidDate': {
+                setDisabled(true);
                 return 'Data non valida';
             }
 
             default: {
+                setDisabled(false);
                 return '';
             }
         }
@@ -39,9 +67,39 @@ function AccountModify(props: any) {
 
     const elabAccountChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
-        setInterval( () => {refresh();}, 3000);
-    }
 
+        const name = name_ref.current.value;
+        const surname = surname_ref.current.value;
+        const cf = cf_ref.current.value;
+        const date = dayjs(date_ref.current.value, "DD/MM/YYYY").format("YYYY-MM-DD");
+        const location = location_ref.current.value;
+        
+
+        if (!isDisabled) {
+
+        let params = {
+            "user_id": user_data.userId,
+            "Nome": name,
+            "Cognome": surname,
+            "Data": date,
+            "Cf": cf,
+            "Indirizzo": location
+        };
+    
+        let params_json = JSON.stringify(params);
+    
+        accModifyPHP(params_json).then(response => {
+            if (response["res"] == -1) {
+                let msg = response["message"];
+                console.log(`ERROR UPDATE: ${msg}`);
+            }
+            if(response["res"] == 1) {
+                console.log("OK UPDATE");
+                setInterval(() => { refresh(); }, 250);
+            }
+        });
+    }
+}
     return (
         <Box>
             <BrowserView>
@@ -53,6 +111,7 @@ function AccountModify(props: any) {
                             label="Nome"
                             defaultValue= {nome}
                             fullWidth
+                            inputRef={name_ref}
                             inputProps={{
                                 maxLength: 20
                             }}
@@ -65,6 +124,7 @@ function AccountModify(props: any) {
                             label="Cognome"
                             defaultValue= {cognome}
                             fullWidth
+                            inputRef={surname_ref}
                             inputProps={{
                                 maxLength: 20
                             }}
@@ -77,6 +137,7 @@ function AccountModify(props: any) {
                             label="Codice fiscale"
                             defaultValue= {codiceFiscale}
                             fullWidth
+                            inputRef={cf_ref}
                             inputProps={{
                                 maxLength: 16, style: { textTransform: "uppercase" }
                             }}
@@ -91,6 +152,7 @@ function AccountModify(props: any) {
                             defaultValue={dataNascita}
                             slotProps={{
                                 textField: {
+                                    inputRef: date_ref,
                                     fullWidth: true,
                                     id: "dateOfBirth",
                                     required: true,
@@ -110,6 +172,7 @@ function AccountModify(props: any) {
                             label="Indirizzo"
                             defaultValue= {indirizzo}
                             fullWidth
+                            inputRef={location_ref}
                             inputProps={{
                                 maxLength: 40
                             }}
@@ -117,7 +180,7 @@ function AccountModify(props: any) {
                     </Grid>
                 </Grid>
                 <Button sx={{ my: 2, marginRight: 2 }} variant="outlined" onClick={props.cancel}>Annulla</Button>
-                <Button sx={{ my: 2 }} variant="outlined"
+                <Button sx={{ my: 2 }} variant="outlined" disabled={isDisabled}
                     onClick={elabAccountChanges(props.setIsLoading, props.refresh)}>Salva</Button>
             </BrowserView>
 
@@ -168,6 +231,7 @@ function AccountModify(props: any) {
                             defaultValue={dataNascita}
                             slotProps={{
                                 textField: {
+                                    inputRef: date_ref,
                                     fullWidth: true,
                                     id: "dateOfBirth",
                                     required: true,
@@ -194,7 +258,7 @@ function AccountModify(props: any) {
                     </Grid>
                 </Grid>
                 <Button fullWidth sx={{ marginTop: 2 }} variant="outlined" onClick={props.cancel}>Annulla</Button>
-                <Button fullWidth sx={{ my: 2 }} variant="outlined"
+                <Button fullWidth sx={{ my: 2 }} variant="outlined" disabled={isDisabled}
                     onClick={elabAccountChanges(props.setIsLoading, props.refresh)}>Salva</Button>
             </MobileView>
         </Box>
