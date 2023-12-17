@@ -1,7 +1,6 @@
 "use client";
 import * as React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
-import Cookies from 'universal-cookie';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@/app/components/appbar';
@@ -15,10 +14,16 @@ import Paper from '@mui/material/Paper';
 import Drawer from '@mui/material/Drawer';
 import { ThemeProvider } from '@mui/material/styles';
 import { getDesignTokens } from '@/app/theme';
-import { useUserData } from '../components/contextProvieder';
+import { useUserData } from '@/app/components/contextProvieder';
+import DashboardInitialize from '@/app/dashboard/components/initialize';
 import NoSSR from '@/app/components/noSSR';
 import DrawerItems from '@/app/dashboard/components/drawer';
 import Overview from '@/app/dashboard/panels/overview';
+import Vehicles from '@/app/dashboard/panels/vehicles';
+import VehiclesModify from '@/app/dashboard/panels/vehicles-modify';
+import Trips from '@/app/dashboard/panels/trips';
+import Payments from '@/app/dashboard/panels/payments';
+import PaymentsModify from '@/app/dashboard/panels/payments-modify';
 import Account from '@/app/dashboard/panels/account';
 import AccountModify from '@/app/dashboard/panels/account-modify';
 
@@ -30,10 +35,19 @@ export default function Dashboard() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const theme = getDesignTokens(prefersDarkMode ? 'dark' : 'light');
     const UserData = useUserData();
+    let dashboardDefault = {
+        accountResponse: "",
+        vehiclesResponse: {
+            vehicles: "",
+            usableDevices: ""
+        },
+        tripsResponse: "",
+        paymentsResponse: ""
+    }
+    const [dashboard, setDashboard] = React.useState(dashboardDefault);
 
     React.useEffect(() => {
         if (!UserData.userId) window.location.replace("/sign-in");
-        setIsLoading(false);
     });
 
     const openDrawer = () => {
@@ -43,10 +57,25 @@ export default function Dashboard() {
     const closeDrawer = () => {
         setIsDrawerOpen(false);
     };
+    const pageRefresh = () => {
+        window.location.reload();
+    }
+    const gotoVehiclesModify = () => {
+        setSelectedDrawerElement("automobili-modify");
+    }
+    const gotoVehicles = () => {
+        setSelectedDrawerElement("automobili");
+    }
+    const gotoPaymentsModify = () => {
+        setSelectedDrawerElement("pagamenti-modify");
+    }
+    const gotoPayments = () => {
+        setSelectedDrawerElement("pagamenti");
+    }
     const gotoAccountModify = () => {
         setSelectedDrawerElement("account-modify");
     }
-    const elabAccountModify = () => {
+    const gotoAccount = () => {
         setSelectedDrawerElement("account");
     }
 
@@ -66,15 +95,9 @@ export default function Dashboard() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <NoSSR>
-                {isLoading ?
-                    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                        <Stack direction="column" spacing={2}>
-                            <img src="/logo_name_dark.svg" />
-                            <CircularProgress color="inherit" sx={{ alignSelf: "center" }} />
-                        </Stack>
-                    </Backdrop> : null}
 
+            <NoSSR>
+                <DashboardInitialize userId={UserData.userId} modifyDashboard={setDashboard} setIsLoading={setIsLoading} />
                 <BrowserView>
                     <Grid container spacing={0} disableEqualOverflow>
                         <Grid xs={12}>
@@ -94,36 +117,83 @@ export default function Dashboard() {
                         </Grid>
 
                         <Grid xs={6} sm={8} md={9} lg={10}>
-                            <Paper elevation={2}
-                                sx={{
-                                    height: 'calc(100vh - 64px)',
-                                    p: 2, borderRadius: 2,
-                                    overflow: 'auto'
-                                }}>
-                                {(selectedDrawerElement == "panoramica") ?
-                                    <Overview value={{ Nome: "Mario", Cognome: "Rossi" }} />
-                                    : null}
-                                {(selectedDrawerElement == "account") ?
-                                    <Account value={{
-                                        Nome: "Mario",
-                                        Cognome: "Rossi",
-                                        DataNascita: "2000-01-01",
-                                        CodiceFiscale: "RSSMRI00A01A000X",
-                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
-                                    }}
-                                        changePanel={gotoAccountModify} />
-                                    : null}
-                                {(selectedDrawerElement == "account-modify") ?
-                                    <AccountModify value={{
-                                        Nome: "Mario",
-                                        Cognome: "Rossi",
-                                        DataNascita: "2000-01-01",
-                                        CodiceFiscale: "RSSMRI00A01A000X",
-                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
-                                    }}
-                                        changePanel={elabAccountModify} />
-                                    : null}
-                            </Paper>
+                            {isLoading ?
+
+                                <LoadingScreen />
+
+                                :
+
+                                <Paper elevation={2}
+                                    sx={{
+                                        height: 'calc(100vh - 64px)',
+                                        p: 2, borderRadius: 2,
+                                        overflow: 'auto'
+                                    }}>
+                                    {(selectedDrawerElement == "panoramica") ?
+                                        <Overview
+                                            value={dashboard.accountResponse} 
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "automobili") ?
+                                        <Vehicles
+                                            value={dashboard.vehiclesResponse.vehicles}
+                                            changePanel={gotoVehiclesModify}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "automobili-modify") ?
+                                        <VehiclesModify
+                                            value={dashboard.vehiclesResponse.usableDevices}
+                                            cancel={gotoVehicles}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "tragitti") ?
+                                        <Trips
+                                            value={dashboard.tripsResponse}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "pagamenti") ?
+                                        <Payments
+                                            value={dashboard.paymentsResponse}
+                                            changePanel={gotoPaymentsModify}
+                                        />
+                                        : null}
+                                    
+                                    {(selectedDrawerElement == "pagamenti-modify") ?
+                                        <PaymentsModify
+                                            value={dashboard.paymentsResponse}
+                                            cancel={gotoPayments}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "account") ?
+                                        <Account
+                                            value={dashboard.accountResponse}
+                                            changePanel={gotoAccountModify}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "account-modify") ?
+                                        <AccountModify
+                                            value={dashboard.accountResponse}
+                                            cancel={gotoAccount}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                </Paper>
+
+                            }
                         </Grid>
                     </Grid>
                 </BrowserView>
@@ -134,46 +204,103 @@ export default function Dashboard() {
                             <AppBarMobile theme={theme} whenClicked={openDrawer} />
                         </Grid>
 
-                        <Drawer sx={{ '& .MuiDrawer-paper': { width: '80vw' } }} open={isDrawerOpen} onClose={closeDrawer}>
+                        <Drawer onClick={closeDrawer} sx={{ '& .MuiDrawer-paper': { width: '80vw' } }} open={isDrawerOpen} onClose={closeDrawer}>
                             <DrawerItems selected={selectedDrawerElement} select={setSelectedDrawerElement} />
                         </Drawer>
 
                         <Grid xs={12}>
-                            <Paper elevation={2}
-                                sx={{
-                                    height: 'calc(100vh - 64px)',
-                                    p: 2,
-                                    borderRadius: 2, 
-                                    overflow: 'auto'
-                                }}>
-                                {(selectedDrawerElement == "panoramica") ?
-                                    <Overview value={{ Nome: "Mario", Cognome: "Rossi" }} />
-                                    : null}
-                                {(selectedDrawerElement == "account") ?
-                                    <Account value={{
-                                        Nome: "Mario",
-                                        Cognome: "Rossi",
-                                        DataNascita: "2000-01-01",
-                                        CodiceFiscale: "RSSMRI00A01A000X",
-                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
-                                    }}
-                                        changePanel={gotoAccountModify} />
-                                    : null}
-                                {(selectedDrawerElement == "account-modify") ?
-                                    <AccountModify value={{
-                                        Nome: "Mario",
-                                        Cognome: "Rossi",
-                                        DataNascita: "2000-01-01",
-                                        CodiceFiscale: "RSSMRI00A01A000X",
-                                        Indirizzo: "Via Roma, 1, 69420 Casoria, Bari (MI)"
-                                    }}
-                                        changePanel={elabAccountModify} />
-                                    : null}
-                            </Paper>
+                            {isLoading ?
+
+                                <LoadingScreen />
+
+                                :
+
+                                <Paper elevation={2}
+                                    sx={{
+                                        height: 'calc(100vh - 64px)',
+                                        p: 2, borderRadius: 2,
+                                        overflow: 'auto'
+                                    }}>
+                                    {(selectedDrawerElement == "panoramica") ?
+                                        <Overview
+                                            value={dashboard.accountResponse} 
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "automobili") ?
+                                        <Vehicles
+                                            value={dashboard.vehiclesResponse.vehicles}
+                                            changePanel={gotoVehiclesModify}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "automobili-modify") ?
+                                        <VehiclesModify
+                                            value={dashboard.vehiclesResponse.usableDevices}
+                                            cancel={gotoVehicles}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "tragitti") ?
+                                        <Trips
+                                            value={dashboard.tripsResponse}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "pagamenti") ?
+                                        <Payments
+                                            value={dashboard.paymentsResponse}
+                                            changePanel={gotoPaymentsModify}
+                                        />
+                                        : null}
+                                    
+                                    {(selectedDrawerElement == "pagamenti-modify") ?
+                                        <PaymentsModify
+                                            value={dashboard.paymentsResponse}
+                                            cancel={gotoPayments}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "account") ?
+                                        <Account
+                                            value={dashboard.accountResponse}
+                                            changePanel={gotoAccountModify}
+                                        />
+                                        : null}
+
+                                    {(selectedDrawerElement == "account-modify") ?
+                                        <AccountModify
+                                            value={dashboard.accountResponse}
+                                            cancel={gotoAccount}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
+                                        />
+                                        : null}
+
+                                </Paper>
+
+                            }
                         </Grid>
                     </Grid>
                 </MobileView>
             </NoSSR>
         </ThemeProvider>
+    )
+}
+
+function LoadingScreen() {
+    return (
+        <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <Stack direction="column" spacing={2}>
+                <img src="/logo_name_dark.svg" />
+                <CircularProgress color="inherit" sx={{ alignSelf: "center" }} />
+            </Stack>
+        </Backdrop>
     )
 }

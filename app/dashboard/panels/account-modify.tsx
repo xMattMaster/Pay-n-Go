@@ -37,6 +37,11 @@ function AccountModify(props: any) {
         }
     }, [dateError]);
 
+    const elabAccountChanges = (setIsLoading: any, refresh: any) => () => {
+        setIsLoading(true);
+        setInterval( () => {refresh();}, 3000);
+    }
+
     return (
         <Box>
             <BrowserView>
@@ -111,7 +116,9 @@ function AccountModify(props: any) {
                         />
                     </Grid>
                 </Grid>
-                <Button sx={{ marginTop: 2 }} variant="outlined" onClick={props.changePanel}>Salva</Button>
+                <Button sx={{ my: 2, marginRight: 2 }} variant="outlined" onClick={props.cancel}>Annulla</Button>
+                <Button sx={{ my: 2 }} variant="outlined"
+                    onClick={elabAccountChanges(props.setIsLoading, props.refresh)}>Salva</Button>
             </BrowserView>
 
             <MobileView>
@@ -186,7 +193,9 @@ function AccountModify(props: any) {
                         />
                     </Grid>
                 </Grid>
-                <Button fullWidth variant="outlined" onClick={props.changePanel}>Salva</Button>
+                <Button fullWidth sx={{ marginTop: 2 }} variant="outlined" onClick={props.cancel}>Annulla</Button>
+                <Button fullWidth sx={{ my: 2 }} variant="outlined"
+                    onClick={elabAccountChanges(props.setIsLoading, props.refresh)}>Salva</Button>
             </MobileView>
         </Box>
     );

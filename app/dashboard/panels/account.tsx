@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
 
+
 function Account(props: any) {
     let nome = props.value["Nome"];
     let cognome = props.value["Cognome"];
@@ -74,7 +75,7 @@ function Account(props: any) {
                         />
                     </Grid>
                 </Grid>
-                <Button sx={{ marginTop: 2 }} variant="outlined" onClick={props.changePanel}>Modifica dati</Button>
+                <Button sx={{ my: 2 }} variant="outlined" onClick={props.changePanel}>Modifica dati</Button>
             </BrowserView>
 
             <MobileView>
@@ -135,7 +136,7 @@ function Account(props: any) {
                         />
                     </Grid>
                 </Grid>
-                <Button fullWidth variant="outlined" onClick={props.changePanel}>Modifica dati</Button>
+                <Button fullWidth sx={{ my: 2 }} variant="outlined" onClick={props.changePanel}>Modifica dati</Button>
             </MobileView>
         </Box>
     );
