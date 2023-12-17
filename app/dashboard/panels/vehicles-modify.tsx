@@ -8,18 +8,57 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import { UserData } from '@/app/components/contextProvieder';
 
+async function addVehiclePHP(params: string) {
+    let fetchData = {
+        "method": "POST",
+        "body": params,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+
+    const res = await fetch('https://basidati.netsons.org/scripts/dashboard_add_vehicle.php', fetchData);
+    const res_final = await res.json();
+    return res_final;
+}
 
 function Vehicles(props: any) {
     const [dispositivo, setDispositivo] = React.useState(-1);
 
+    const user_data = React.useContext(UserData);
+    const targa_ref = React.useRef();
+    const modello_ref = React.useRef();
+    
     const elabVehiclesChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
-        setInterval(() => { refresh(); }, 3000);
+
+        let params = {
+            "user_id": user_data.userId,
+            "targa": targa_ref.current.value,
+            "model": modello_ref.current.value,
+            "device": dispositivo
+        }
+
+        let params_json = JSON.stringify(params);
+
+        addVehiclePHP(params_json).then(response => {
+            if (response["res"] == -1) {
+                let msg = response["message"];
+                console.log(`ERROR ADD: ${msg}`);
+            }
+
+            if (response["res"] == 1) {
+                setInterval(() => { refresh(); }, 250);
+            }
+        })
     }
 
     const handleChange = (event: SelectChangeEvent) => {
         setDispositivo(event.target.value as unknown as number);
+        console.log(dispositivo);
     };
 
     return (
@@ -32,6 +71,7 @@ function Vehicles(props: any) {
                             id="modello"
                             label="Modello"
                             fullWidth
+                            inputRef={modello_ref}
                             inputProps={{
                                 maxLength: 20
                             }}
@@ -43,6 +83,7 @@ function Vehicles(props: any) {
                             id="targa"
                             label="Targa"
                             fullWidth
+                            inputRef={targa_ref}
                             inputProps={{
                                 maxLength: 7, style: { textTransform: "uppercase" }
                             }}
@@ -83,6 +124,7 @@ function Vehicles(props: any) {
                             id="modello"
                             label="Modello"
                             fullWidth
+                            inputRef={modello_ref}
                             inputProps={{
                                 maxLength: 20
                             }}
@@ -94,6 +136,7 @@ function Vehicles(props: any) {
                             id="targa"
                             label="Targa"
                             fullWidth
+                            inputRef={targa_ref}
                             inputProps={{
                                 maxLength: 7, style: { textTransform: "uppercase" }
                             }}

@@ -3,6 +3,23 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef, gridClasses, itIT } from '@mui/x-data-grid';
+import { UserData } from '@/app/components/contextProvieder';
+
+
+async function deleteVehiclePHP(params: string) {
+    let fetchData = {
+        "method": "POST",
+        "body": params,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+
+    const res = await fetch('https://basidati.netsons.org/scripts/dashboard_delete_vehicle.php', fetchData);
+    const res_final = await res.json();
+    return res_final;
+}
 
 const columns: GridColDef[] = [
     {
@@ -28,12 +45,28 @@ const columns: GridColDef[] = [
 
 function Vehicles(props: any) {
     const [selectedVehicle, setSelectedVehicle] = React.useState("");
-
+    const user_data = React.useContext(UserData);
     const elabVehiclesDelete = (setIsLoading: any, refresh: any) => () => {
         if (selectedVehicle != "")
         {
             setIsLoading(true);
-            setInterval(() => { refresh(); }, 3000);
+            
+            let params = {
+                "user_id": user_data.userId,
+                "targa": selectedVehicle
+            }
+            
+            let params_json = JSON.stringify(params);
+
+            deleteVehiclePHP(params_json).then(response => {
+                if (response["res"] == -1 ) {
+                    let msg = response["message"];
+                    console.log(`ERROR DELETE: ${msg}`);
+                }
+                if (response["res"] == 1) {
+                    setInterval(() => { refresh(); }, 250);
+                }
+            })
         }
     }
 
