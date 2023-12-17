@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Done, Dock, Map, CreditCard, Person } from '@mui/icons-material';
+import { Done, DirectionsCar, Map, CreditCard, Person } from '@mui/icons-material';
 import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 
@@ -28,11 +28,11 @@ function Drawer(props: any) {
                 </ListItemIcon>
                 <ListItemText>Panoramica</ListItemText>
             </MenuItem>
-            <MenuItem sx={menuItems} selected={(props.selected == "dispositivi")} onClick={menuItemClickHandle("dispositivi")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "automobili" || props.selected == "automobili-modify")} onClick={menuItemClickHandle("automobili")}>
                 <ListItemIcon>
-                    <Dock />
+                    <DirectionsCar />
                 </ListItemIcon>
-                <ListItemText>Dispositivi</ListItemText>
+                <ListItemText>Automobili</ListItemText>
             </MenuItem>
             <MenuItem sx={menuItems} selected={(props.selected == "tragitti")} onClick={menuItemClickHandle("tragitti")}>
                 <ListItemIcon>
@@ -40,7 +40,7 @@ function Drawer(props: any) {
                 </ListItemIcon>
                 <ListItemText>Tragitti</ListItemText>
             </MenuItem>
-            <MenuItem sx={menuItems} selected={(props.selected == "pagamenti")} onClick={menuItemClickHandle("pagamenti")}>
+            <MenuItem sx={menuItems} selected={(props.selected == "pagamenti" || props.selected == "pagamenti-modify")} onClick={menuItemClickHandle("pagamenti")}>
                 <ListItemIcon>
                     <CreditCard />
                 </ListItemIcon>
