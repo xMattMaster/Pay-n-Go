@@ -78,6 +78,7 @@ function PaymentsModify(props: any) {
                                 value={tipoPagamento}
                                 label="Metodo di pagamento"
                                 onChange={handleChange}
+                                defaultValue="Conto"
                             >
                                 <MenuItem value={"Conto"}>Conto</MenuItem>
                                 <MenuItem value={"Carta"}>Carta</MenuItem>
