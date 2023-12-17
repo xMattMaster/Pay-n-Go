@@ -231,6 +231,7 @@ function AccountModify(props: any) {
                             defaultValue={dataNascita}
                             slotProps={{
                                 textField: {
+                                    inputRef: date_ref,
                                     fullWidth: true,
                                     id: "dateOfBirth",
                                     required: true,
@@ -257,7 +258,7 @@ function AccountModify(props: any) {
                     </Grid>
                 </Grid>
                 <Button fullWidth sx={{ marginTop: 2 }} variant="outlined" onClick={props.cancel}>Annulla</Button>
-                <Button fullWidth sx={{ my: 2 }} variant="outlined"
+                <Button fullWidth sx={{ my: 2 }} variant="outlined" disabled={isDisabled}
                     onClick={elabAccountChanges(props.setIsLoading, props.refresh)}>Salva</Button>
             </MobileView>
         </Box>

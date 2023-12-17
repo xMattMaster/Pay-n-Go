@@ -126,6 +126,7 @@ function PaymentsModify(props: any) {
                             id="codicePagamento"
                             label="Codice di pagamento"
                             defaultValue={codice}
+                            inputRef={valueRef}
                             fullWidth
                             inputProps={{
                                 maxLength: 30, style: { textTransform: "uppercase" }
