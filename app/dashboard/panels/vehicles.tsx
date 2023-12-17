@@ -59,7 +59,6 @@ function Vehicles(props: any) {
                         if (selectedTarga != null)
                             setSelectedVehicle(selectedTarga);
                         else setSelectedVehicle("");
-                        console.log(selectedTarga);
                     }}
                 />
             </Box>

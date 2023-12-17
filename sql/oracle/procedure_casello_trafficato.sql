@@ -4,7 +4,8 @@ CREATE OR REPLACE PROCEDURE casello_trafficato(
 ) AS 
 BEGIN
 BEGIN
-    SELECT C.Id, COUNT(*) AS NUMERO_VOLTE INTO Out_max_id, Out_somma FROM (TRAGITTI T JOIN CASELLI C ON T.Casello_Ingresso = C.Id) JOIN CASELLI C2 ON C2.Id = T.Casello_Uscita
+    SELECT C.Id, COUNT(*) AS NUMERO_VOLTE INTO Out_max_id, Out_somma
+    FROM (TRAGITTI T JOIN CASELLI C ON T.Casello_Ingresso = C.Id)
     GROUP BY C.Id
     ORDER BY NUMERO_VOLTE DESC
     FETCH FIRST 1 ROW ONLY;

@@ -8,7 +8,7 @@ MODIFIES SQL DATA
 BEGIN
     SELECT C.Id, COUNT(*) AS NUMERO_VOLTE
     INTO Out_max_id, Out_somma
-    FROM (TRAGITTI T JOIN CASELLI C ON T.Casello_Ingresso = C.Id) JOIN CASELLI C2 ON C2.Id = T.Casello_Uscita
+    FROM (TRAGITTI T JOIN CASELLI C ON T.Casello_Ingresso = C.Id)
     GROUP BY C.Id
     ORDER BY NUMERO_VOLTE DESC
     LIMIT 1;
