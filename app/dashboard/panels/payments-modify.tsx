@@ -8,14 +8,57 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import { UserData } from '@/app/components/contextProvieder';
+
+
+async function modifyPHP(params: string) {
+    let fetchData = {
+        "method": "POST",
+        "body": params,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+
+    const res = await fetch('https://basidati.netsons.org/scripts/dashboard_payments_modify.php', fetchData);
+    const res_final = await res.json();
+    return res_final;
+}
 
 function PaymentsModify(props: any) {
     const [tipoPagamento, setTipoPagamento] = React.useState(props.value["TipoPagamento"]);
     let codice = props.value["CodicePagamento"];
+    const valueRef = React.useRef();
+    const user_data = React.useContext(UserData);
+
+   
 
     const elabPaymentsChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
-        setInterval(() => { refresh(); }, 3000);
+
+        const code = valueRef.current.value;
+
+        let params = {
+            "user_id": user_data.userId,
+            "method": tipoPagamento,
+            "code": code
+        };
+    
+        let params_json = JSON.stringify(params);
+    
+        modifyPHP(params_json).then(response => {
+            if (response["res"] == -1) {
+                let msg = response["message"];
+                console.log(`ERROR UPDATE: ${msg}`);
+            }
+            if(response["res"] == 1) {
+                console.log("OK UPDATE");
+                setInterval(() => { refresh(); }, 250);
+            }
+        });
+    
+    
     }
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -48,6 +91,7 @@ function PaymentsModify(props: any) {
                             label="Codice di pagamento"
                             defaultValue={codice}
                             fullWidth
+                            inputRef={valueRef}
                             inputProps={{
                                 maxLength: 30, style: { textTransform: "uppercase" }
                             }}
