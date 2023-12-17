@@ -139,6 +139,8 @@ export default function Dashboard() {
                                         <Vehicles
                                             value={dashboard.vehiclesResponse.vehicles}
                                             changePanel={gotoVehiclesModify}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
                                         />
                                         : null}
 
@@ -229,6 +231,8 @@ export default function Dashboard() {
                                         <Vehicles
                                             value={dashboard.vehiclesResponse.vehicles}
                                             changePanel={gotoVehiclesModify}
+                                            setIsLoading={setIsLoading}
+                                            refresh={pageRefresh}
                                         />
                                         : null}
 
