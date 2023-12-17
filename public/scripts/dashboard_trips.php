@@ -27,7 +27,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT CONCAT(T.NumTragitto, T.Dispositivo) AS Id, T.NumTragitto,
+    $sql = "SELECT CONCAT(T.NumTragitto, '.', T.Dispositivo) AS Id, T.NumTragitto,
                 T.Dispositivo,
                 CONCAT(C1.Codice, ', ', C1.Numero) AS CasIngresso,
                 T.DataOraIngresso,
