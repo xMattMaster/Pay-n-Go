@@ -7,15 +7,19 @@ CREATE OR REPLACE PROCEDURE associazione_auto(
 ) AS 
 BEGIN
 DECLARE 
-    max_id DISPOSITIVI.Codice%TYPE;
+    new_id DISPOSITIVI.Codice%TYPE;
 BEGIN
     IF In_option = 0 THEN
         BEGIN
-            SELECT MAX(DISPOSITIVI.Id) INTO max_id FROM DISPOSITIVI;
-            INSERT INTO DISPOSITIVI VALUES (max_id + 1);
+            SELECT DISPOSITIVI.Codice INTO new_id FROM DISPOSITIVI WHERE DIPOSITIVI.Codice NOT IN (
+                SELECT ASSOCIAZIONI_DISP_AUTO.Dispositivo
+                FROM ASSOCIAZIONI_DISP_AUTO
+            )
+            ORDER BY DIPOSITIVI.Codice ASC
+            FETCH FIRST 1 ROW ONLY;
             INSERT INTO AUTOMOBILI (Targa, Modello) VALUES (In_targa, In_modello);
             INSERT INTO APPARTENENZE_AUTO (Automobile, Cliente) VALUES (In_targa, In_user_id);
-            INSERT INTO ASSOCIAZIONI_DISP_AUTO (Dispositivo, Automobile) VALUES (max_id + 1, In_targa);
+            INSERT INTO ASSOCIAZIONI_DISP_AUTO (Dispositivo, Automobile) VALUES (new_id, In_targa);
             COMMIT;
         END;
     ELSE
