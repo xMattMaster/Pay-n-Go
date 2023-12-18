@@ -9,16 +9,21 @@ CREATE PROCEDURE ASSOCIAZIONE_AUTO(
 )
 MODIFIES SQL DATA
 BEGIN
-    DECLARE max_id INT;
+    DECLARE new_id INT;
 
     IF In_option = 0 THEN
         START TRANSACTION;
         
-        SELECT MAX(DISPOSITIVI.Codice) INTO max_id FROM DISPOSITIVI;
-        INSERT INTO DISPOSITIVI(Codice) VALUES (max_id + 1);
+        SELECT DISPOSITIVI.Codice INTO new_id FROM DISPOSITIVI WHERE DISPOSITIVI.Codice NOT IN (
+                SELECT ASSOCIAZIONI_DISP_AUTO.Dispositivo
+                FROM ASSOCIAZIONI_DISP_AUTO
+            ) 
+        ORDER BY DISPOSITIVI.Codice ASC
+        FETCH FIRST 1 ROW ONLY;
+        
         INSERT INTO AUTOMOBILI (Targa, Modello) VALUES (In_targa, In_modello);
         INSERT INTO APPARTENENZE_AUTO (Automobile, Cliente) VALUES (In_targa, In_user_id);
-        INSERT INTO ASSOCIAZIONI_DISP_AUTO (Dispositivo, Automobile) VALUES (max_id + 1, In_targa);
+        INSERT INTO ASSOCIAZIONI_DISP_AUTO (Dispositivo, Automobile) VALUES (new_id, In_targa);
 
         COMMIT;
     ELSE
