@@ -29,13 +29,15 @@ async function modifyPHP(params: string) {
 function PaymentsModify(props: any) {
     const [tipoPagamento, setTipoPagamento] = React.useState(props.value["TipoPagamento"]);
     let codice = props.value["CodicePagamento"];
-    const valueRef = React.useRef();
+    const valueRef = React.useRef<HTMLInputElement>();
     const user_data = React.useContext(UserData);
 
    
 
     const elabPaymentsChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
+
+        if (!valueRef.current || valueRef.current.value.length <= 0) return;
 
         const code = valueRef.current.value;
 
@@ -53,7 +55,6 @@ function PaymentsModify(props: any) {
                 console.log(`ERROR UPDATE: ${msg}`);
             }
             if(response["res"] == 1) {
-                console.log("OK UPDATE");
                 setInterval(() => { refresh(); }, 250);
             }
         });
