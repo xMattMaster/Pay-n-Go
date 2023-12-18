@@ -1,0 +1,13 @@
+CREATE USER payngo_dba IDENTIFIED BY payngo_dba;
+GRANT DBA TO payngo_dba;
+
+CREATE ROLE admin;
+GRANT CONNECT TO admin;
+GRANT RESOURCE ON payngo_dba.* TO admin;
+
+CREATE ROLE utente;
+GRANT CONNECT TO utente;
+GRANT SELECT ON payngo.UTENTI TO utente;
+GRANT SELECT ON payngo.CLIENTI TO utente;
+GRANT SELECT ON payngo.APPARTENENZE_AUTO TO utente;
+GRANT SELECT ON payngo.TRAGITTI TO utente;
