@@ -29,11 +29,14 @@ function Vehicles(props: any) {
     const [dispositivo, setDispositivo] = React.useState(-1);
 
     const user_data = React.useContext(UserData);
-    const targa_ref = React.useRef();
-    const modello_ref = React.useRef();
+    const targa_ref = React.useRef<HTMLInputElement>();
+    const modello_ref = React.useRef<HTMLInputElement>();
     
     const elabVehiclesChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
+
+        if (!targa_ref.current || targa_ref.current.value.length <= 0) return;
+        if (!modello_ref.current || modello_ref.current.value.length <= 0) return;
 
         let params = {
             "user_id": user_data.userId,
@@ -58,7 +61,6 @@ function Vehicles(props: any) {
 
     const handleChange = (event: SelectChangeEvent) => {
         setDispositivo(event.target.value as unknown as number);
-        console.log(dispositivo);
     };
 
     return (

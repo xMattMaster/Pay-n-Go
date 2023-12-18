@@ -37,11 +37,11 @@ function AccountModify(props: any) {
     let indirizzo = props.value["Indirizzo"];
     const user_data = React.useContext(UserData);
 
-    const name_ref = React.useRef();
-    const surname_ref = React.useRef();
-    const cf_ref = React.useRef();
-    const date_ref = React.useRef();
-    const location_ref = React.useRef();
+    const name_ref = React.useRef<HTMLInputElement>();
+    const surname_ref = React.useRef<HTMLInputElement>();
+    const cf_ref = React.useRef<HTMLInputElement>();
+    const date_ref = React.useRef<HTMLInputElement>();
+    const location_ref = React.useRef<HTMLInputElement>();
 
     const [dateError, setDateError] = React.useState<DateValidationError | null>(null);
     const checkAge = dayjs().startOf('day').subtract(18, 'year');
@@ -67,6 +67,12 @@ function AccountModify(props: any) {
 
     const elabAccountChanges = (setIsLoading: any, refresh: any) => () => {
         setIsLoading(true);
+
+        if (!name_ref.current || name_ref.current.value.length <= 0) return;
+        if (!surname_ref.current || surname_ref.current.value.length <= 0) return;
+        if (!cf_ref.current || cf_ref.current.value.length <= 0) return;
+        if (!date_ref.current || date_ref.current.value.length <= 0) return;
+        if (!location_ref.current || location_ref.current.value.length <= 0) return;
 
         const name = name_ref.current.value;
         const surname = surname_ref.current.value;
@@ -94,7 +100,6 @@ function AccountModify(props: any) {
                 console.log(`ERROR UPDATE: ${msg}`);
             }
             if(response["res"] == 1) {
-                console.log("OK UPDATE");
                 setInterval(() => { refresh(); }, 250);
             }
         });
