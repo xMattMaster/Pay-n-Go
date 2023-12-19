@@ -14,7 +14,7 @@
     $email = $decoded['email'];
     $clearPassword = $decoded['password'];
 
-    mysqli_report(MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ALL);
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     $output = new \stdClass();
     $output->res = 0;
